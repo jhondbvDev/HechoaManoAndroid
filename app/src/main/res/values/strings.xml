@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Hecho a Mano</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="employee">Employee</string>
+    <string name="products">Products</string>
+    <string name="summary">Summary</string>
+    <string name="home_por_favor_elija">Por favor, elija entre crear un pedido o suministrar un pedido.</string>
+    <string name="ordenes_de_clientes">Órdenes de Clientes</string>
+    <string name="entrada_de_productos">Entrada de Productos</string>
+    <string name="control_de_inventario">Control de Inventario</string>
+
+    <!--LOGIN-->
+    <string name="login_prompt_user">Nombre de Usuario</string>
+    <string name="login_prompt_password">Ingrese su contraseña</string>
+    <string name="login_button_text">Iniciar sesión</string>
+    <string name="login_welcome">¡Bienvenido a Artisan Stock!</string>
+    <string name="login_subtitle">Por favor, introduce tu nombre de usuario o correo electrónico y tu contraseña para iniciar sesión.</string>
+    <string name="load_preparando_stock">Preparando Stock</string>
+</resources>

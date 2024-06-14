@@ -21,6 +21,6 @@ class LoadInventaryActivity : AppCompatActivity() {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
             finish()
-        }, 2000) // 2 segundos
+        }, 1500) // 2 segundos
     }
 }

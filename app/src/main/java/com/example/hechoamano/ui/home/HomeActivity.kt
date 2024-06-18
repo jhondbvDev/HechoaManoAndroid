@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.databinding.ActivityHomeBinding
 import com.example.hechoamano.ui.customerorders.CustomerOrderActivity
+import com.example.hechoamano.ui.customerorders.EmptyCustomerOrderActivity
 import com.example.hechoamano.ui.productentry.ProductEntryActivity
 import com.example.hechoamano.ui.stockcontrol.StockControlActivity
 
@@ -21,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonClientes.setOnClickListener {
-            val intent = Intent(this, CustomerOrderActivity::class.java)
+            val intent = Intent(this, EmptyCustomerOrderActivity::class.java)
             startActivity(intent)
         }
 

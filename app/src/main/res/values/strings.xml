@@ -18,4 +18,14 @@
     <string name="login_welcome">¡Bienvenido a Artisan Stock!</string>
     <string name="login_subtitle">Por favor, introduce tu nombre de usuario o correo electrónico y tu contraseña para iniciar sesión.</string>
     <string name="load_preparando_stock">Preparando Stock</string>
+    <string name="mis_ordenes">Mis Órdenes</string>
+    <string name="crear_orden">Crear Orden</string>
+    <string name="homepage">Homepage</string>
+    <string name="no_se_han_encontrado_ordenes">No se han creado órdenes</string>
+    <string name="actualmente_no_se_ha_creado_ninguna_orden">Actualmente no se ha creado ninguna orden.</string>
+    <string name="barranquilla">BARRANQUILLA</string>
+    <string name="recuerdos_del_pasado">Recuerdos del Pasado</string>
+    <string name="jhon_ballesteros">Jhon Ballesteros</string>
+    <string name="empty_results_description">No se encontraron resultados</string>
+    <string name="empty_results_title">¡Upsssssss!</string>
 </resources>

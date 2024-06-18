@@ -1,21 +1,27 @@
 package com.example.hechoamano.ui.customerorders
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.hechoamano.R
+import com.example.hechoamano.databinding.ActivityEmptyCustomerOrderBinding
 
 class EmptyCustomerOrderActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityEmptyCustomerOrderBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_empty_customer_order)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        binding = ActivityEmptyCustomerOrderBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.buttonOrder.setOnClickListener {
+            val intent = Intent(this, ClientCustomerOrderActivity::class.java)
+            startActivity(intent)
         }
+
+        binding.buttonBack.setOnClickListener { this.onBackPressed() }
     }
 }

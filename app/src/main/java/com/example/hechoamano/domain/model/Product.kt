@@ -4,7 +4,7 @@ import com.example.hechoamano.data.model.ProductModel
 
 data class Product(
     val id: String,
-    val stock: String,
+    var stock: String,
     val family: String,
     val subfamily: String,
     val type: String,

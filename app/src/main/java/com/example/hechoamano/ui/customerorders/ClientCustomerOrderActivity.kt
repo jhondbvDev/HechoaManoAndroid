@@ -48,7 +48,7 @@ class ClientCustomerOrderActivity : AppCompatActivity() {
         })
 
         clientViewModel.navigateToProducts.observe(this, Observer { client ->
-            //startActivity(EmptyCustomerOrderActivity.getStartIntent(this, client))
+            startActivity(ProductsCustomerOrderActivity.getStartIntent(this, client))
         })
 
         binding.swipeContainer.setOnRefreshListener {

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -30,7 +31,6 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
     private val productViewModel: ProductsCustomerOrderViewModel by viewModels()
     private lateinit var adapter: ProductsAdapter
     private lateinit var productArrayList: List<Product>
-    private lateinit var productEditedArrayList: List<Product>
 
     companion object {
         lateinit var client: Client
@@ -60,20 +60,50 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
             binding.progress.isVisible = it
         })
 
-        productViewModel.navigateToSummary.observe(this, Observer { product ->
-            //startActivity(EmptyCustomerOrderActivity.getStartIntent(this, product))
-        })
-
-        productEditedArrayList = ArrayList()
-        productViewModel.onClickItem.observe(this, Observer { product ->
-            productEditedArrayList.plus(product)
+        productViewModel.navigateToSummary.observe(this, Observer { products ->
+            startActivity(SummaryCustomerOrderActivity.getStartIntent(this, client, products))
         })
 
         binding.swipeContainer.setOnRefreshListener {
-            binding.swipeContainer.isRefreshing = false
-            productViewModel.onCreate()
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("¿Estás seguro de refrescar la lista? Se perderán los cambios realizados")
+                .setCancelable(false)
+                .setTitle("Refrescar resultados")
+                .setPositiveButton("Sí") { dialog, id ->
+                    binding.swipeContainer.isRefreshing = false
+                    productViewModel.onCreate()
+                }
+                .setNegativeButton("No") { dialog, id ->
+                    binding.swipeContainer.isRefreshing = false
+                    dialog.dismiss()
+                }
+            builder.create().show()
         }
 
+        binding.buttonAgregados.setOnClickListener {
+            if(binding.buttonAgregados.text == "Ver todos"){
+                binding.buttonAgregados.text = "Ver agregados"
+                adapter.filterList(productArrayList)
+            } else {
+                binding.buttonAgregados.text = "Ver todos"
+                adapter.filterList(productArrayList.filter { it.edited })
+            }
+        }
+
+        binding.buttonSiguiente.setOnClickListener {
+            if(productArrayList.none { it.edited }){
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("No has agregado ningún producto a la orden")
+                    .setCancelable(false)
+                    .setTitle("Orden vacía")
+                    .setPositiveButton("Ok") { dialog, id ->
+                        dialog.dismiss()
+                    }
+                builder.create().show()
+            } else {
+                productViewModel.navigateToSummary.postValue(productArrayList.filter { it.edited })
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -116,13 +146,9 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
 
     private fun initRecyclerView() {
         binding.recyclerProducts.layoutManager = LinearLayoutManager(this)
-        adapter = ProductsAdapter(productArrayList) { onItemSelected(it) }
+        adapter = ProductsAdapter(productArrayList)
         binding.recyclerProducts.adapter = adapter
         val emptyDataObserver = EmptyDataObserver(binding.recyclerProducts, findViewById<View>(R.id.emptyDataParent))
         adapter.registerAdapterDataObserver(emptyDataObserver)
-    }
-
-    private fun onItemSelected(product: Product) {
-        productViewModel.onClickItem.postValue(product)
     }
 }

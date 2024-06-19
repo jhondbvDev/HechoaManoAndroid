@@ -16,7 +16,6 @@ class ProductsCustomerOrderViewModel @Inject constructor(
     val productModel = MutableLiveData<List<Product>>()
     val isLoading = MutableLiveData<Boolean>()
     val navigateToSummary = MutableLiveData<List<Product>>()
-    val onClickItem = MutableLiveData<Product>()
 
     fun onCreate() {
         viewModelScope.launch {

@@ -15,14 +15,22 @@ import com.example.hechoamano.domain.model.Product
 class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
     private lateinit var product: Product
     private val binding = ItemProductListBinding.bind(inflater)
+    private val downEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0)
+    private val upEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0)
+    private val greenCardColor = ContextCompat.getColor(this.itemView.context, R.color.green_cards)
+    private val blueCardColor = ContextCompat.getColor(this.itemView.context, R.color.blue_cards)
+    private val graySelectedCardColor = ContextCompat.getColor(this.itemView.context, R.color.gray_selected_card)
 
-    fun render(product: Product, onClickListener: (Product) -> Unit) {
+
+    fun render(product: Product) {
         "${product.family} ${product.subfamily}".also { binding.name.text = it }
         binding.region.text = product.region
         binding.size.text = product.size
         binding.type.text = product.type
         setStyleEdited(product)
-        itemView.setOnClickListener { onClickViewListener(product) }
+        itemView.setOnClickListener {
+            onClickViewListener(product)
+        }
         this.product = product
 
         binding.editStock.setOnEditorActionListener(onEditorActionListener)
@@ -38,7 +46,7 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
             binding.agr.visibility = View.VISIBLE
             binding.stock.visibility = View.GONE
             binding.disponible.visibility = View.GONE
-            binding.layoutProductList.setBackgroundColor(ContextCompat.getColor(this.itemView.context, R.color.green_cards))
+            binding.layoutProductList.setBackgroundColor(greenCardColor)
         } else {
             binding.stock.text = product.stock
             binding.stock.visibility = View.VISIBLE
@@ -47,23 +55,22 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
             binding.stockEdited.visibility = View.GONE
             binding.disp.visibility = View.GONE
             binding.agr.visibility = View.GONE
-            binding.layoutProductList.setBackgroundColor(ContextCompat.getColor(this.itemView.context, R.color.blue_cards))
+            binding.layoutProductList.setBackgroundColor(blueCardColor)
         }
     }
 
     private fun onClickViewListener(product: Product) {
         binding.editStock.visibility = View.VISIBLE
         binding.editStock.requestFocus()
-        binding.editStock.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0))
-        binding.editStock.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0))
-        binding.layoutProductList.setBackgroundColor(ContextCompat.getColor(this.itemView.context, R.color.gray_selected_card))
+        binding.editStock.dispatchTouchEvent(downEvent)
+        binding.editStock.dispatchTouchEvent(upEvent)
+        binding.layoutProductList.setBackgroundColor(graySelectedCardColor)
         binding.stock.visibility = View.GONE
         binding.disponible.visibility = View.GONE
         binding.stockAvailable.visibility = View.GONE
         binding.stockEdited.visibility = View.GONE
         binding.disp.visibility = View.GONE
         binding.agr.visibility = View.GONE
-
     }
 
     private val onEditorActionListener = TextView.OnEditorActionListener { v, actionId, event ->
@@ -83,5 +90,4 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
         }
         false
     }
-
 }

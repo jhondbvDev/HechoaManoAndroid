@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hechoamano.R
 import com.example.hechoamano.domain.model.Product
 
-class ProductsAdapter (private  var products: List<Product>, private val onClickListener: (Product) -> Unit)
+class ProductsAdapter (private  var products: List<Product>)
     : RecyclerView.Adapter<ProductsViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -15,7 +15,7 @@ class ProductsAdapter (private  var products: List<Product>, private val onClick
 
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
         val item = products[position]
-        holder.render(item, onClickListener)
+        holder.render(item)
     }
 
     override fun getItemCount(): Int = products.size

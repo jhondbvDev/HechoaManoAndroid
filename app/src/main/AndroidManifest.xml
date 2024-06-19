@@ -16,6 +16,18 @@
         android:theme="@style/Theme.HechoAMano"
         tools:targetApi="31">
         <activity
+            android:name=".ui.productentry.SummaryProductEntryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.productentry.ProductsProductEntryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.productentry.EmployeesProductEntryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.productentry.EmptyProductEntryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.customerorders.SummaryCustomerOrderActivity"
             android:exported="false" />
         <activity

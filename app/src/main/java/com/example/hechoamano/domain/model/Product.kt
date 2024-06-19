@@ -12,7 +12,9 @@ data class Product(
     val region: String,
     val salePrice: String,
     val buyPrice: String,
-    val name: String
+    val name: String,
+    var edited: Boolean = false,
+    var stockEdited: Int = 0
 )
 
 fun ProductModel.toDomain() = Product(

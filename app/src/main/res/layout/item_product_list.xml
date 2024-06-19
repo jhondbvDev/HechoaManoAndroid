@@ -8,6 +8,7 @@
     android:layout_marginHorizontal="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_product_list"
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:background="@color/blue_nav_bar">
@@ -86,6 +87,7 @@
             android:textStyle="bold"
             android:lineHeight="0sp"
             tools:text="@string/number_100"
+            tools:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -97,11 +99,71 @@
             android:textSize="13sp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            tools:text="@string/disponible"
+            android:text="@string/disponible"
             android:gravity="center"
+            tools:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/stock"
             app:layout_constraintTop_toBottomOf="@id/stock"
             app:layout_constraintEnd_toEndOf="@id/stock"/>
+
+
+        <!-- Stock Edited -->
+
+        <TextView
+            android:id="@+id/stock_available"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:textSize="35sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:lineHeight="0sp"
+            tools:text="/100"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/disp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="DISP."
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/stock_available"
+            app:layout_constraintTop_toBottomOf="@id/stock_available"
+            app:layout_constraintEnd_toEndOf="@id/stock_available"/>
+
+        <TextView
+            android:id="@+id/stock_edited"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-40dp"
+            android:textSize="51sp"
+            android:textColor="@color/white"
+            android:gravity="bottom"
+            android:textStyle="bold"
+            android:lineHeight="0sp"
+            tools:text="@string/number_100"
+            app:layout_constraintEnd_toStartOf="@id/stock_available"
+            app:layout_constraintBottom_toBottomOf="@id/stock_available"/>
+
+        <TextView
+            android:id="@+id/agr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="AGR."
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/stock_edited"
+            app:layout_constraintTop_toBottomOf="@id/stock_edited"
+            app:layout_constraintEnd_toEndOf="@id/stock_edited"/>
+
 
         <EditText
             android:id="@+id/edit_stock"

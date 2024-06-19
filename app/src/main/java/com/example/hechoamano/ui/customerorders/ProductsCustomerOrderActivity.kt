@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.example.hechoamano.ui.base.BaseActivity
 import com.example.hechoamano.ui.customerorders.adapter.ProductsAdapter
 import com.example.hechoamano.ui.util.EmptyDataObserver
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class ProductsCustomerOrderActivity : BaseActionBarActivity() {
@@ -75,36 +77,41 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        val inflater = menuInflater
-//
-//        inflater.inflate(R.menu.search_menu, menu)
-//
-//        val searchItem = menu.findItem(R.id.actionSearch)
-//
-//        val searchView = searchItem.actionView as SearchView
-//
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String): Boolean {
-//                filter(newText)
-//                return false
-//            }
-//        })
+        val inflater = menuInflater
+
+        inflater.inflate(R.menu.search_menu, menu)
+
+        val searchItem = menu.findItem(R.id.actionSearch)
+
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                filter(newText)
+                return false
+            }
+        })
         return true
     }
 
     private fun filter(text: String) {
-//        val filtered = ArrayList<Product>()
-//
-//        for (item in productArrayList) {
-//            if (item.name.toLowerCase().contains(text.lowercase(Locale.getDefault()))) {
-//                filtered.add(item)
-//            }
-//        }
-//        adapter.filterList(filtered)
+        val filtered = ArrayList<Product>()
+
+        for (item in productArrayList) {
+            if (item.name.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
+                || item.family.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
+                || item.subfamily.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
+                || item.type.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
+                || item.type.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
+                || item.size.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))){
+                filtered.add(item)
+            }
+        }
+        adapter.filterList(filtered)
     }
 
     private fun initRecyclerView() {

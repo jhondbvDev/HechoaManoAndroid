@@ -10,11 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.databinding.ActivityMainBinding
 import com.example.hechoamano.domain.GetProducts
 import com.example.hechoamano.domain.model.Product
+import com.example.hechoamano.ui.base.BaseActivity
 import com.example.hechoamano.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
 

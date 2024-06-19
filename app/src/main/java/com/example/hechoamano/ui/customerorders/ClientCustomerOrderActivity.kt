@@ -16,13 +16,14 @@ import com.example.hechoamano.R
 import com.example.hechoamano.databinding.ActivityClientCustomerOrderBinding
 import com.example.hechoamano.databinding.ActivityEmptyCustomerOrderBinding
 import com.example.hechoamano.domain.model.Client
+import com.example.hechoamano.ui.base.BaseActionBarActivity
 import com.example.hechoamano.ui.customerorders.adapter.ClientsAdapter
 import com.example.hechoamano.ui.util.EmptyDataObserver
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
 @AndroidEntryPoint
-class ClientCustomerOrderActivity : AppCompatActivity() {
+class ClientCustomerOrderActivity : BaseActionBarActivity() {
 
     private lateinit var binding: ActivityClientCustomerOrderBinding
 
@@ -35,6 +36,8 @@ class ClientCustomerOrderActivity : AppCompatActivity() {
 
         binding = ActivityClientCustomerOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setActionBarTitle("Cientes")
 
         clientViewModel.onCreate()
 
@@ -59,36 +62,38 @@ class ClientCustomerOrderActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        val inflater = menuInflater
-//
-//        inflater.inflate(R.menu.search_menu, menu)
-//
-//        val searchItem = menu.findItem(R.id.actionSearch)
-//
-//        val searchView = searchItem.actionView as SearchView
-//
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String): Boolean {
-//                filter(newText)
-//                return false
-//            }
-//        })
+        val inflater = menuInflater
+
+        inflater.inflate(R.menu.search_menu, menu)
+
+        val searchItem = menu.findItem(R.id.actionSearch)
+
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                filter(newText)
+                return false
+            }
+        })
         return true
     }
 
     private fun filter(text: String) {
-//        val filtered = ArrayList<Client>()
-//
-//        for (item in clientArrayList) {
-//            if (item.name.toLowerCase().contains(text.lowercase(Locale.getDefault()))) {
-//                filtered.add(item)
-//            }
-//        }
-//        adapter.filterList(filtered)
+        val filtered = ArrayList<Client>()
+
+        for (item in clientArrayList) {
+            if (item.name.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
+                || item.city.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
+                || item.shopName.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))) {
+                filtered.add(item)
+            }
+        }
+        adapter.filterList(filtered)
     }
 
     private fun initRecyclerView() {

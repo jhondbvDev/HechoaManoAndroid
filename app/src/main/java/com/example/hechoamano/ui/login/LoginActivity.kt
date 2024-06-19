@@ -5,9 +5,10 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.databinding.ActivityLoginBinding
+import com.example.hechoamano.ui.base.BaseActivity
 import com.example.hechoamano.ui.home.LoadInventaryActivity
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 

@@ -34,4 +34,5 @@
     <string name="monedero_redondo">MONEDERO REDONDO</string>
     <string name="tradicional">Tradicional</string>
     <string name="mini">Mini</string>
+    <string name="buscar">Buscar...</string>
 </resources>

@@ -4,8 +4,9 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.databinding.ActivityStockControlBinding
+import com.example.hechoamano.ui.base.BaseActivity
 
-class StockControlActivity : AppCompatActivity() {
+class StockControlActivity : BaseActivity() {
 
     private lateinit var binding: ActivityStockControlBinding
 

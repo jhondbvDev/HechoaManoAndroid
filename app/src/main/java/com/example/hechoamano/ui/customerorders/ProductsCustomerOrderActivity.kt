@@ -14,12 +14,14 @@ import com.example.hechoamano.R
 import com.example.hechoamano.databinding.ActivityProductsCustomerOrderBinding
 import com.example.hechoamano.domain.model.Client
 import com.example.hechoamano.domain.model.Product
+import com.example.hechoamano.ui.base.BaseActionBarActivity
+import com.example.hechoamano.ui.base.BaseActivity
 import com.example.hechoamano.ui.customerorders.adapter.ProductsAdapter
 import com.example.hechoamano.ui.util.EmptyDataObserver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProductsCustomerOrderActivity : AppCompatActivity() {
+class ProductsCustomerOrderActivity : BaseActionBarActivity() {
 
     private lateinit var binding: ActivityProductsCustomerOrderBinding
 
@@ -42,6 +44,8 @@ class ProductsCustomerOrderActivity : AppCompatActivity() {
 
         binding = ActivityProductsCustomerOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setActionBarTitle("Productos")
 
         productViewModel.onCreate()
 

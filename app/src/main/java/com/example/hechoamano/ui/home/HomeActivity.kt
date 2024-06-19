@@ -6,12 +6,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.databinding.ActivityHomeBinding
+import com.example.hechoamano.ui.base.BaseActivity
 import com.example.hechoamano.ui.customerorders.CustomerOrderActivity
 import com.example.hechoamano.ui.customerorders.EmptyCustomerOrderActivity
 import com.example.hechoamano.ui.productentry.ProductEntryActivity
 import com.example.hechoamano.ui.stockcontrol.StockControlActivity
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 

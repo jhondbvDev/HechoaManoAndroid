@@ -5,8 +5,9 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.databinding.ActivityEmptyCustomerOrderBinding
+import com.example.hechoamano.ui.base.BaseActivity
 
-class EmptyCustomerOrderActivity : AppCompatActivity() {
+class EmptyCustomerOrderActivity : BaseActivity() {
 
     private lateinit var binding: ActivityEmptyCustomerOrderBinding
 

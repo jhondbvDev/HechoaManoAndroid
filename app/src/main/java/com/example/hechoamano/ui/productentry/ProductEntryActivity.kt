@@ -4,8 +4,9 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.databinding.ActivityProductEntryBinding
+import com.example.hechoamano.ui.base.BaseActivity
 
-class ProductEntryActivity : AppCompatActivity() {
+class ProductEntryActivity : BaseActivity() {
 
     private lateinit var binding: ActivityProductEntryBinding
 

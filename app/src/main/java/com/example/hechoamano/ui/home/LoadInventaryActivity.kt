@@ -9,9 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.hechoamano.R
+import com.example.hechoamano.ui.base.BaseActivity
 import com.example.hechoamano.ui.login.LoginActivity
 
-class LoadInventaryActivity : AppCompatActivity() {
+class LoadInventaryActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

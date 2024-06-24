@@ -33,22 +33,49 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
-        <Button
-            android:id="@+id/button_agregados"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="50dp"
-            android:background="@drawable/button_background"
-            android:text="@string/ver_agregados"
-            android:textColor="@color/white"/>
-        <Button
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp"
+            android:weightSum="3">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_agregados"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_agregados"
+                android:drawableTint="@color/white"
+                android:padding="10dp"
+                android:maxLines="1"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/button_background_secondary"
+                android:text="@string/ver_agregados"
+                android:textColor="@color/white"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_remover"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_remover"
+                android:drawableTint="@color/white"
+                android:padding="10dp"
+                android:background="@drawable/button_background_secondary"
+                android:text="remover"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_siguiente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="50dp"
+            android:layout_marginHorizontal="10dp"
             android:background="@drawable/button_background"
             android:text="@string/siguiente"
             android:textColor="@color/white"/>

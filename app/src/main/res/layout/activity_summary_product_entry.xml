@@ -11,7 +11,7 @@
         android:id="@+id/container_employee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue_cards"
+        android:background="@drawable/card_rounded_blue"
         android:padding="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,17 +139,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:weightSum="4">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_cancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
-            android:background="@drawable/button_background"
+            android:background="@drawable/button_background_secondary"
             android:text="@string/cancelar"
             android:textColor="@color/white"
             android:layout_weight="1"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_crear_orden"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

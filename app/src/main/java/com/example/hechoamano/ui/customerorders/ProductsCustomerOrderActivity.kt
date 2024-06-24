@@ -131,13 +131,10 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
     private fun filter(text: String) {
         val filtered = ArrayList<Product>()
 
+        val textLower = text.lowercase(Locale.getDefault())
         for (item in productArrayList) {
-            if (item.name.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
-                || item.family.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
-                || item.subfamily.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
-                || item.type.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
-                || item.type.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
-                || item.size.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))){
+            val properties = listOf(item.name, item.family, item.subfamily, item.type, item.size)
+            if (properties.any { it?.lowercase(Locale.getDefault())?.contains(textLower) == true }) {
                 filtered.add(item)
             }
         }

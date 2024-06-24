@@ -6,5 +6,6 @@ data class ClientModel (
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
     @SerializedName("shopName") val shopName: String,
-    @SerializedName("city") val city: String
+    @SerializedName("city") val city: String,
+    @SerializedName("discount") val discount: Double
 )

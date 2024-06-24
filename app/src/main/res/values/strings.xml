@@ -41,4 +41,9 @@
     <string name="no_hay_entrada_de_productos">No hay entrada de productos</string>
     <string name="actualmente_no_se_ha_creado_ninguna_entrada">Actualmente no se ha creado ninguna entrada</string>
     <string name="crear_entrada">Crear entrada</string>
+    <string name="no_hay_historial_de_inventario">No hay historial de inventario</string>
+    <string name="actualmente_no_se_ha_creado_ninguna_historial">Actualmente no se ha creado ninguna historial.</string>
+    <string name="nuevo_inventario">Nuevo Inventario</string>
+    <string name="historial_de_inventario">Historial de Inventario</string>
+    <string name="confirmar">Confirmar</string>
 </resources>

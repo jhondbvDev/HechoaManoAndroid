@@ -4,14 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.databinding.ActivityHomeBinding
 import com.example.hechoamano.ui.base.BaseActivity
-import com.example.hechoamano.ui.customerorders.CustomerOrderActivity
 import com.example.hechoamano.ui.customerorders.EmptyCustomerOrderActivity
 import com.example.hechoamano.ui.productentry.EmptyProductEntryActivity
-import com.example.hechoamano.ui.productentry.ProductEntryActivity
-import com.example.hechoamano.ui.stockcontrol.StockControlActivity
+import com.example.hechoamano.ui.stockcontrol.EmptyStockControlActivity
 
 class HomeActivity : BaseActivity() {
 
@@ -34,7 +31,7 @@ class HomeActivity : BaseActivity() {
         }
 
         binding.buttonInventario.setOnClickListener {
-            val intent = Intent(this, StockControlActivity::class.java)
+            val intent = Intent(this, EmptyStockControlActivity::class.java)
             startActivity(intent)
         }
     }

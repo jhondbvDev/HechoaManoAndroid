@@ -18,15 +18,33 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
     private val downEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0)
     private val upEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0)
     private val greenCardColor = ContextCompat.getColor(this.itemView.context, R.color.green_cards)
-    private val blueCardColor = ContextCompat.getColor(this.itemView.context, R.color.blue_cards)
+    private val blueCardBackground = ContextCompat.getDrawable(this.itemView.context, R.drawable.button_list_blue)
     private val graySelectedCardColor = ContextCompat.getColor(this.itemView.context, R.color.gray_selected_card)
 
 
     fun render(product: Product) {
-        "${product.family} ${product.subfamily}".also { binding.name.text = it }
+        binding.name.text = product.subfamily?.let { product.family + " " + it } ?: product.family
         binding.region.text = product.region
-        binding.size.text = product.size
-        binding.type.text = product.type
+
+        product.size?.let {
+            binding.size.text = it
+            binding.size.visibility = View.VISIBLE
+        } ?: run {
+            binding.size.visibility = View.GONE
+        }
+
+        product.type?.let {
+            binding.type.text = it
+            binding.type.visibility = View.VISIBLE
+        } ?: run {
+            binding.type.visibility = View.GONE
+        }
+
+        if(product.subfamily != null && product.size == null && product.type == null){
+            binding.type.text = product.subfamily
+            binding.type.visibility = View.VISIBLE
+        }
+
         setStyleEdited(product)
         itemView.setOnClickListener {
             onClickViewListener(product)
@@ -48,14 +66,15 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
             binding.disponible.visibility = View.GONE
             binding.layoutProductList.setBackgroundColor(greenCardColor)
         } else {
-            binding.stock.text = product.stock
+            binding.stock.text = product.stock.toString()
             binding.stock.visibility = View.VISIBLE
             binding.disponible.visibility = View.VISIBLE
             binding.stockAvailable.visibility = View.GONE
+            binding.stockEdited.text = ""
             binding.stockEdited.visibility = View.GONE
             binding.disp.visibility = View.GONE
             binding.agr.visibility = View.GONE
-            binding.layoutProductList.setBackgroundColor(blueCardColor)
+            binding.layoutProductList.background = blueCardBackground
         }
     }
 
@@ -78,13 +97,17 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
             || actionId == EditorInfo.IME_ACTION_NEXT
             || event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) {
 
-            if (product.stock.toInt() >= v.text.toString().toInt()){
+            if (!v.text.isNullOrEmpty() && v.text.toString().toInt() > 0){
 
                 binding.editStock.visibility = View.GONE
                 product.edited = v.text.toString().toInt() > 0
                 product.stockEdited = v.text.toString().toInt()
                 setStyleEdited(product)
 
+                return@OnEditorActionListener true
+            } else {
+                binding.editStock.visibility = View.GONE
+                setStyleEdited(product)
                 return@OnEditorActionListener true
             }
         }

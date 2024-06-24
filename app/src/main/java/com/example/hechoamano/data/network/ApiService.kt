@@ -1,7 +1,11 @@
 package com.example.hechoamano.data.network
 
+import com.example.hechoamano.data.authentication.LoginRequest
 import com.example.hechoamano.data.model.ClientModel
+import com.example.hechoamano.data.model.ClientOrderModel
 import com.example.hechoamano.data.model.EmployeeModel
+import com.example.hechoamano.data.model.EmployeeOrderModel
+import com.example.hechoamano.data.model.InventoryOrderModel
 import com.example.hechoamano.data.model.ProductModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,10 +34,21 @@ class ApiService @Inject constructor(private val api: ApiClient) {
         }
     }
 
-    suspend fun login(username: String, password: String): Boolean{
+    suspend fun saveClientOrders(clientOrderModel : ClientOrderModel){
         return  withContext(Dispatchers.IO){
-            val response = api.login(username, password)
-            response.body() ?: false
+            api.saveClientOrders(clientOrderModel)
+        }
+    }
+
+    suspend fun saveEmployeeOrders(employeeOrderModel: EmployeeOrderModel){
+        return  withContext(Dispatchers.IO){
+            api.saveEmployeeOrders(employeeOrderModel)
+        }
+    }
+
+    suspend fun saveInventaryControls(inventoryOrderModel: InventoryOrderModel){
+        return  withContext(Dispatchers.IO){
+            api.saveInventoryControls(inventoryOrderModel)
         }
     }
 }

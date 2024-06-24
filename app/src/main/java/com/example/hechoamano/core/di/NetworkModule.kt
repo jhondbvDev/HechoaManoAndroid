@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.hechoamano.R
 import com.example.hechoamano.data.authentication.BasicAuthInterceptor
 import com.example.hechoamano.data.network.ApiClient
+import com.example.hechoamano.data.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,34 +26,13 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(@ApplicationContext context: Context): Retrofit{
-        // Carga el certificado desde los recursos raw
-        val certificate = CertificateFactory.getInstance("X.509")
-            .generateCertificate(context.resources.openRawResource(R.raw.mockable))
-
-        // Crea un KeyStore conteniendo nuestro certificado de confianza
-        val keyStore = KeyStore.getInstance(KeyStore.getDefaultType()).apply {
-            load(null, null)
-            setCertificateEntry("my_cert", certificate)
-        }
-
-        // Crea un TrustManager que confíe en el KeyStore
-        val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
-            init(keyStore)
-        }
-
-        // Crea un SSLContext que utiliza nuestro TrustManager
-        val sslContext = SSLContext.getInstance("TLS").apply {
-            init(null, trustManagerFactory.trustManagers, null)
-        }
 
         val client = OkHttpClient.Builder()
-            .sslSocketFactory(sslContext.socketFactory)
-            .addInterceptor(BasicAuthInterceptor("admin", "admin"))
+            .addInterceptor(BasicAuthInterceptor(context))
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("https://demo8127198.mockable.io/")
-            //.baseUrl("https://hechoamanoapi.azurewebsites.net/")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

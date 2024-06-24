@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue_nav_bar"
+        android:background="@drawable/card_rounded_blue"
         android:padding="2dp">
 
         <TextView
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:textColor="@color/gray_text"
-            android:background="@color/white"
+            android:background="@drawable/card_semirounded_white"
             android:textStyle="bold"
             tools:text="@string/barranquilla"
             android:gravity="center"

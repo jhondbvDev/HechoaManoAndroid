@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.HechoAMano" parent="Theme.MaterialComponents.DayNight">
+    <style name="Theme.HechoAMano" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
 
         <item name="colorPrimary">@color/blue_nav_bar</item>
@@ -13,6 +13,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="MyActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="android:background">@color/blue_nav_bar</item>
     </style>
 
     <style name="Theme.HechoAMano.NoActionbar">

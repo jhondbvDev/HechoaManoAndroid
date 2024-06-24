@@ -3,22 +3,14 @@ package com.example.hechoamano.ui.productentry
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.hechoamano.R
 import com.example.hechoamano.databinding.ActivitySummaryProductEntryBinding
 import com.example.hechoamano.domain.model.Employee
 import com.example.hechoamano.domain.model.Product
 import com.example.hechoamano.ui.base.BaseActionBarActivity
-import com.example.hechoamano.ui.customerorders.adapter.SummaryProductsAdapter
-import com.example.hechoamano.ui.productentry.adapter.ProductsAdapter
 import com.example.hechoamano.ui.home.HomeActivity
-import com.example.hechoamano.ui.util.EmptyDataObserver
+import com.example.hechoamano.ui.productentry.adapter.SummaryProductsAdapter
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -77,12 +69,10 @@ class SummaryProductEntryActivity : BaseActionBarActivity() {
     }
 
     private fun loadInfo() {
-        val total = products.sumBy { it.stockEdited * it.buyPrice.toInt() }
+        val total = products.sumOf { it.stockEdited * it.buyPrice }
         binding.total.text = format.format(total)
 
         binding.employeeName.text = employee.name
-        /*binding.employeeCity.text = employee.city
-        binding.employeeShopName.text = employee.shopName*/
         binding.employeeTotal.text = format.format(total)
     }
 

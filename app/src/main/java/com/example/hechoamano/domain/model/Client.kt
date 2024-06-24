@@ -6,12 +6,14 @@ data class Client (
     val id: String,
     val name: String,
     val shopName : String,
-    val city: String
+    val city: String,
+    val discount: Double
 )
 
 fun ClientModel.toDomain() = Client(
     id,
     name,
     shopName,
-    city
+    city,
+    discount
 )

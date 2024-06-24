@@ -1,4 +1,4 @@
-package com.example.hechoamano
+package com.example.hechoamano.ui.stockcontrol
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,18 +10,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class ProductsStockControlViewModel @Inject constructor(
     private val getProducts: GetProducts
-) : ViewModel() {
-
+) : ViewModel()  {
     val productModel = MutableLiveData<List<Product>>()
+    val isLoading = MutableLiveData<Boolean>()
+    val navigateToSummary = MutableLiveData<List<Product>>()
 
     fun onCreate() {
         viewModelScope.launch {
+            isLoading.postValue(true)
             val result = getProducts()
 
             result?.let {
                 productModel.postValue(it)
+                isLoading.postValue(false)
             }
         }
     }

@@ -13,11 +13,17 @@ class SummaryProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflat
     private val format = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
 
     fun render(product: Product) {
-        (product.family + " " + product.subfamily).also { binding.productName.text = it }
-        (product.type + " | " + product.size + " | " + product.region).also { binding.productDescription.text = it }
 
-        format.format(product.buyPrice.toInt()).also { binding.productPrice.text = it }
-        val total = product.buyPrice.toInt() * product.stockEdited
+        binding.productName.text = product.subfamily?.let { product.family + " " + it } ?: product.family
+
+        val description = StringBuilder(binding.productDescription.text)
+        product.type?.let { description.append(it).append(" | ") }
+        product.size?.let { description.append(it).append(" | ") }
+        product.region?.let { description.append(it) }
+        binding.productDescription.text = description.toString()
+
+        format.format(product.salePrice.toInt()).also { binding.productPrice.text = it }
+        val total = product.salePrice.toInt() * product.stockEdited
         format.format(total).also { binding.productTotal.text = it }
     }
 }

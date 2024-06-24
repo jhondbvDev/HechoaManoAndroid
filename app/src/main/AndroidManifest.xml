@@ -16,6 +16,18 @@
         android:theme="@style/Theme.HechoAMano"
         tools:targetApi="31">
         <activity
+            android:name=".ui.stockcontrol.SummaryStockControlActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.stockcontrol.EmptyStockControlActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.stockcontrol.ProductsStockControlActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.stockcontrol.EmployeesStockControlActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.productentry.SummaryProductEntryActivity"
             android:exported="false" />
         <activity

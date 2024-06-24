@@ -78,14 +78,18 @@ class SummaryCustomerOrderActivity : BaseActionBarActivity() {
     }
 
     private fun loadInfo() {
-        val subtotal = products.sumBy { it.stockEdited * it.buyPrice.toInt() }
-        val iva = subtotal * 0.19
-        val descuento = (subtotal * 0.10)
-        val total = subtotal + iva - descuento
+        val subtotal = products.sumOf { it.salePrice * it.stockEdited.toDouble() }
+        //val iva = subtotal * 0.19
+        val discount = (subtotal * client.discount / 100)
+        //val total = subtotal + iva - discount
+        val total = subtotal - discount
 
         binding.subtotal.text = format.format(subtotal)
-        binding.iva.text = format.format(iva)
-        binding.descuento.text = format.format(descuento)
+        //binding.iva.text = format.format(iva)
+        binding.iva.visibility = View.GONE
+        binding.labelIva.visibility = View.GONE
+
+        binding.descuento.text = format.format(discount)
         binding.total.text = format.format(total)
 
         binding.clientName.text = client.name

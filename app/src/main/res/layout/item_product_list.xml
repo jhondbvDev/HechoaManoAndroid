@@ -11,7 +11,7 @@
         android:id="@+id/layout_product_list"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        android:background="@color/blue_nav_bar">
+        android:background="@drawable/button_list_blue">
 
         <TextView
             android:id="@+id/region"
@@ -20,7 +20,7 @@
             android:minWidth="200dp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:background="@color/black"
+            android:background="@drawable/card_semirounded_black"
             android:textSize="15sp"
             android:layout_marginTop="0dp"
             android:layout_marginStart="0dp"
@@ -41,8 +41,9 @@
             android:singleLine="false"
             tools:text="@string/monedero_redondo"
             android:layout_marginStart="18dp"
+            android:layout_marginBottom="30dp"
             app:layout_constraintTop_toBottomOf="@id/region"
-            app:layout_constraintBottom_toTopOf="@id/type"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
@@ -51,7 +52,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/white"
-            android:background="@color/gray_buttons"
+            android:background="@drawable/tag_rounded"
             android:textStyle="bold"
             android:padding="4dp"
             android:layout_marginBottom="11dp"
@@ -66,13 +67,14 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/white"
-            android:background="@color/gray_buttons"
+            android:background="@drawable/tag_rounded"
             android:textStyle="bold"
             android:padding="4dp"
             android:layout_marginStart="3dp"
             tools:text="@string/mini"
             android:gravity="center"
-            app:layout_constraintTop_toTopOf="@id/type"
+            android:layout_marginBottom="11dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/type"/>
 
         <TextView

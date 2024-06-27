@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hechoamano.R
 
@@ -20,5 +21,13 @@ abstract class BaseActionBarActivity : AppCompatActivity() {
         supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FFFFFF")))
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(true)
+    }
+
+    fun onUnknownError() {
+        Toast.makeText(
+            this,
+            "Ocurrió un error inesperado. Vuelve a intentarlo.",
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

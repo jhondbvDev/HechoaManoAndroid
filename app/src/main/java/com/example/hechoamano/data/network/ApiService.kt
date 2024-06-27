@@ -1,14 +1,19 @@
 package com.example.hechoamano.data.network
 
-import com.example.hechoamano.data.authentication.LoginRequest
 import com.example.hechoamano.data.model.ClientModel
-import com.example.hechoamano.data.model.ClientOrderModel
+import com.example.hechoamano.data.dto.ClientOrderDTO
 import com.example.hechoamano.data.model.EmployeeModel
+import com.example.hechoamano.data.dto.EmployeeOrderDTO
+import com.example.hechoamano.data.dto.InventoryOrderDTO
+import com.example.hechoamano.data.model.ClientOrderModel
 import com.example.hechoamano.data.model.EmployeeOrderModel
-import com.example.hechoamano.data.model.InventoryOrderModel
+import com.example.hechoamano.data.model.InventoryControlModel
 import com.example.hechoamano.data.model.ProductModel
+import com.example.hechoamano.data.util.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Response
+import retrofit2.http.GET
 import javax.inject.Inject
 
 class ApiService @Inject constructor(private val api: ApiClient) {
@@ -34,19 +39,40 @@ class ApiService @Inject constructor(private val api: ApiClient) {
         }
     }
 
-    suspend fun saveClientOrders(clientOrderModel : ClientOrderModel){
+    suspend fun getAllClientOrders(): List<ClientOrderModel>{
+        return  withContext(Dispatchers.IO){
+            val response = api.getAllClientOrders()
+            response.body() ?: emptyList()
+        }
+    }
+
+    suspend fun getAllEmployeeOrders(): List<EmployeeOrderModel>{
+        return  withContext(Dispatchers.IO){
+            val response = api.getAllEmployeeOrders()
+            response.body() ?: emptyList()
+        }
+    }
+
+    suspend fun getAllInventoryControls(): List<InventoryControlModel>{
+        return  withContext(Dispatchers.IO){
+            val response = api.getAllInventoryControls()
+            response.body() ?: emptyList()
+        }
+    }
+
+    suspend fun saveClientOrders(clientOrderModel : ClientOrderDTO){
         return  withContext(Dispatchers.IO){
             api.saveClientOrders(clientOrderModel)
         }
     }
 
-    suspend fun saveEmployeeOrders(employeeOrderModel: EmployeeOrderModel){
+    suspend fun saveEmployeeOrders(employeeOrderModel: EmployeeOrderDTO){
         return  withContext(Dispatchers.IO){
             api.saveEmployeeOrders(employeeOrderModel)
         }
     }
 
-    suspend fun saveInventaryControls(inventoryOrderModel: InventoryOrderModel){
+    suspend fun saveInventaryControls(inventoryOrderModel: InventoryOrderDTO){
         return  withContext(Dispatchers.IO){
             api.saveInventoryControls(inventoryOrderModel)
         }

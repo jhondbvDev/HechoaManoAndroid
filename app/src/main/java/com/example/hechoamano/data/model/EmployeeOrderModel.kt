@@ -3,7 +3,8 @@ package com.example.hechoamano.data.model
 import com.google.gson.annotations.SerializedName
 
 data class EmployeeOrderModel(
-    @SerializedName("employeeId") val employeeId: String,
-    @SerializedName("details") val details: List<DetailOrderModel>,
-    @SerializedName("totalPrice") val totalPrice: Long
+    @SerializedName("id") val id: String,
+    @SerializedName("employeeName") val employeeName: String,
+    @SerializedName("totalPrice") val totalPrice: Double,
+    @SerializedName("createdDate") val createdDate: String
 )

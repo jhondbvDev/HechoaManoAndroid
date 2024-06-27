@@ -23,7 +23,22 @@ class SessionManager (context: Context) {
     /**
      * Function to fetch auth token
      */
-    fun fetchAuthToken(): String? {
-        return prefs.getString(USER_TOKEN, null)
+    fun fetchAuthToken(): String? =
+        prefs.getString(USER_TOKEN, null)
+
+    /**
+     * Function to save auth token
+     */
+    fun savePreference(key: String, value: String) {
+        val editor = prefs.edit()
+        editor.putString(key, value)
+        editor.apply()
     }
+
+    /**
+     * Function to get value preference
+     */
+    fun getPreference(key: String): String? =
+        prefs.getString(key, null)
+
 }

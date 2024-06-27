@@ -1,16 +1,27 @@
 package com.example.hechoamano.ui.stockcontrol
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hechoamano.core.di.NetworkModule
+import com.example.hechoamano.data.dto.DetailOrderDTO
+import com.example.hechoamano.data.dto.EmployeeOrderDTO
+import com.example.hechoamano.data.dto.InventoryOrderDTO
+import com.example.hechoamano.data.dto.InventoryOrderDetailDTO
+import com.example.hechoamano.data.network.ApiClient
 import com.example.hechoamano.databinding.ActivitySummaryStockControlBinding
 import com.example.hechoamano.domain.model.Employee
 import com.example.hechoamano.domain.model.Product
 import com.example.hechoamano.ui.base.BaseActionBarActivity
 import com.example.hechoamano.ui.stockcontrol.adapter.SummaryProductsAdapter
 import com.example.hechoamano.ui.home.HomeActivity
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -19,7 +30,7 @@ class SummaryStockControlActivity : BaseActionBarActivity() {
     private val format = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
     private lateinit var binding: ActivitySummaryStockControlBinding
     private lateinit var adapter: SummaryProductsAdapter
-    private var back: Boolean = false
+
     companion object {
         lateinit var employee: Employee
         lateinit var products: List<Product>
@@ -33,7 +44,6 @@ class SummaryStockControlActivity : BaseActionBarActivity() {
 
     override fun onResume() {
         super.onResume()
-        back = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,24 +56,15 @@ class SummaryStockControlActivity : BaseActionBarActivity() {
         initRecyclerView()
 
         binding.editProducts.setOnClickListener {
-            back = true
             onBackPressed()
         }
 
         binding.buttonCancelar.setOnClickListener {
-            onBackPressed()
+            showCancelOrderDialog()
         }
 
         binding.buttonCrearOrden.setOnClickListener {
             showConfirmationDialog()
-        }
-    }
-
-    override fun onBackPressed() {
-        if(back)
-            super.onBackPressed()
-        else{
-            showCancelOrderDialog()
         }
     }
 
@@ -75,19 +76,68 @@ class SummaryStockControlActivity : BaseActionBarActivity() {
 
     private fun showConfirmationDialog() {
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("¿Desea guardar la orden?")
+        builder.setMessage("¿Desea guardar el inventario?")
             .setCancelable(false)
             .setTitle("Confirmación")
             .setPositiveButton("Sí") { dialog, id ->
-                finish()
-                startActivity(Intent(this, HomeActivity::class.java))
-                finishAffinity()
-                finishAndRemoveTask()
+                saveStockControl()
             }
             .setNegativeButton("No") { dialog, id ->
                 dialog.dismiss()
             }
         builder.create().show()
+    }
+
+    private fun saveStockControl() {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Guardando inventario...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        try {
+            val apiService = NetworkModule.provideRetrofit(this).create(ApiClient::class.java)
+
+            val employeeOrderDTO = InventoryOrderDTO(
+                employee.id,
+                products.map { product ->
+                    InventoryOrderDetailDTO(
+                        productId = product.id,
+                        countedQuantity = product.stockEdited.toLong(),
+                        systemQuantity = product.stock.toLong()
+                    )
+                }
+            )
+
+            apiService.saveInventoryControls(employeeOrderDTO).enqueue(object :
+                Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response.code() in 200..299) {
+                        val builder = AlertDialog.Builder(this@SummaryStockControlActivity)
+                        builder.setMessage("Inventario guardado exitosamente")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok") { dialog, id ->
+                                progressDialog.hide()
+                                finalizeOrder()
+                            }
+                        builder.create().show()
+                    } else {
+                        onUnknownError()
+                        progressDialog.hide()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    onUnknownError()
+                    progressDialog.hide()
+                }
+            })
+        } catch (e: Exception) {
+            onUnknownError()
+            progressDialog.hide()
+        }
     }
 
     private fun showCancelOrderDialog() {
@@ -96,14 +146,18 @@ class SummaryStockControlActivity : BaseActionBarActivity() {
             .setCancelable(false)
             .setTitle("Cancelar orden")
             .setPositiveButton("Sí") { dialog, id ->
-                finish()
-                startActivity(Intent(this, HomeActivity::class.java))
-                finishAffinity()
-                finishAndRemoveTask()
+                finalizeOrder()
             }
             .setNegativeButton("No") { dialog, id ->
                 dialog.dismiss()
             }
         builder.create().show()
+    }
+
+    private fun finalizeOrder() {
+        finish()
+        startActivity(Intent(this, HomeActivity::class.java))
+        finishAffinity()
+        finishAndRemoveTask()
     }
 }

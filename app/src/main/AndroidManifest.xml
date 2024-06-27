@@ -52,7 +52,7 @@
             android:name=".ui.customerorders.EmptyCustomerOrderActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.home.LoadInventaryActivity"
+            android:name=".ui.home.LoadInventoryActivity"
             android:exported="false" />
         <activity
             android:name=".ui.stockcontrol.StockControlActivity"

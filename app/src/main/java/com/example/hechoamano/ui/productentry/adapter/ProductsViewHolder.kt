@@ -83,6 +83,7 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
         binding.editStock.requestFocus()
         binding.editStock.dispatchTouchEvent(downEvent)
         binding.editStock.dispatchTouchEvent(upEvent)
+        binding.editStock.setText(if (product.stockEdited == 0) "" else product.stockEdited.toString())
         binding.layoutProductList.setBackgroundColor(graySelectedCardColor)
         binding.stock.visibility = View.GONE
         binding.disponible.visibility = View.GONE

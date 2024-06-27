@@ -11,7 +11,7 @@ import com.example.hechoamano.data.network.LoginClient
 import com.example.hechoamano.data.session.SessionManager
 import com.example.hechoamano.databinding.ActivityLoginBinding
 import com.example.hechoamano.ui.base.BaseActivity
-import com.example.hechoamano.ui.home.LoadInventaryActivity
+import com.example.hechoamano.ui.home.LoadInventoryActivity
 import okhttp3.Credentials
 import retrofit2.Response
 import retrofit2.Call
@@ -36,7 +36,7 @@ class LoginActivity : BaseActivity() {
             login()
         }
 
-        if(true) {
+        if(false) {
             binding.user.setText("Admin")
             binding.password.setText("Admin")
             binding.loginButton.performClick()
@@ -76,7 +76,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun GoToHome() {
-        val intent = Intent(this, LoadInventaryActivity::class.java)
+        val intent = Intent(this, LoadInventoryActivity::class.java)
         startActivity(intent)
     }
 }

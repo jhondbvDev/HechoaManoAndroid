@@ -1,0 +1,7 @@
+package com.example.hechoamano.ui.util
+
+object Constants {
+    const val CLIENT_ORDERS_PREFERENCE = "CLIENT_ORDERS_PREFERENCE"
+    const val EMPLOYEE_ORDERS_PREFERENCE = "EMPLOYEE_ORDERS_PREFERENCE"
+    const val INVENTORY_CONTROLS_PREFERENCE = "INVENTORY_CONTROLS_PREFERENCE"
+}

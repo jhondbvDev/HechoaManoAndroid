@@ -61,11 +61,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginTop="10dp"
-                android:drawableStart="@drawable/ic_remover"
+                android:drawableStart="@drawable/ic_filter"
                 android:drawableTint="@color/white"
                 android:padding="10dp"
                 android:background="@drawable/button_background_secondary"
-                android:text="remover"
+                android:text="Filtrar"
                 android:textColor="@color/white"/>
 
         </LinearLayout>
@@ -100,5 +100,17 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="match_parent"
         android:layout_gravity="center" />
+
+    <include
+        android:id="@+id/filters"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_filters"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

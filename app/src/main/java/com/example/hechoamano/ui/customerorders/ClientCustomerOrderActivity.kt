@@ -1,5 +1,7 @@
 package com.example.hechoamano.ui.customerorders
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -30,6 +32,12 @@ class ClientCustomerOrderActivity : BaseActionBarActivity() {
     private val clientViewModel: ClientCustomerOrderViewModel by viewModels()
     private lateinit var adapter: ClientsAdapter
     private lateinit var clientArrayList: List<Client>
+
+    companion object {
+        fun getStartIntent(context: Context): Intent {
+            return Intent(context, ClientCustomerOrderActivity::class.java)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

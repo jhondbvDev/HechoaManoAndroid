@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
+    kotlin("plugin.serialization") version "1.5.30"
     id("com.google.dagger.hilt.android")
 }
 
@@ -68,6 +69,7 @@ dependencies {
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.activity)
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

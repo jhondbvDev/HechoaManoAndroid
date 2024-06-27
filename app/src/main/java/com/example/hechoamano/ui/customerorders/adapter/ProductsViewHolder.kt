@@ -1,25 +1,47 @@
 package com.example.hechoamano.ui.customerorders.adapter
 
+import android.content.Context
+import android.content.Context.*
 import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hechoamano.R
 import com.example.hechoamano.databinding.ItemProductListBinding
 import com.example.hechoamano.domain.model.Product
 
-class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
+
+class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
     private lateinit var product: Product
     private val binding = ItemProductListBinding.bind(inflater)
-    private val downEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0)
-    private val upEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0)
+    private val downEvent = MotionEvent.obtain(
+        SystemClock.uptimeMillis(),
+        SystemClock.uptimeMillis(),
+        MotionEvent.ACTION_DOWN,
+        0f,
+        0f,
+        0
+    )
+    private val upEvent = MotionEvent.obtain(
+        SystemClock.uptimeMillis(),
+        SystemClock.uptimeMillis(),
+        MotionEvent.ACTION_UP,
+        0f,
+        0f,
+        0
+    )
     private val greenCardColor = ContextCompat.getColor(this.itemView.context, R.color.green_cards)
-    private val blueCardBackground = ContextCompat.getDrawable(this.itemView.context, R.drawable.button_list_blue)
-    private val graySelectedCardColor = ContextCompat.getColor(this.itemView.context, R.color.gray_selected_card)
+    private val blueCardBackground =
+        ContextCompat.getDrawable(this.itemView.context, R.drawable.button_list_blue)
+    private val graySelectedCardColor =
+        ContextCompat.getColor(this.itemView.context, R.color.gray_selected_card)
 
 
     fun render(product: Product) {
@@ -40,7 +62,7 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
             binding.type.visibility = View.GONE
         }
 
-        if(product.subfamily != null && product.size == null && product.type == null){
+        if (product.subfamily != null && product.size == null && product.type == null) {
             binding.type.text = product.subfamily
             binding.type.visibility = View.VISIBLE
         }
@@ -55,7 +77,7 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
     }
 
     private fun setStyleEdited(product: Product) {
-        if(product.edited){
+        if (product.edited) {
             binding.stockEdited.text = product.stockEdited.toString()
             binding.stockEdited.visibility = View.VISIBLE
             "/ ${product.stock}".also { binding.stockAvailable.text = it }
@@ -79,10 +101,15 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
     }
 
     private fun onClickViewListener(product: Product) {
+        if (product.stock == 0) {
+            Toast.makeText(itemView.context, "No hay stock disponible", Toast.LENGTH_SHORT).show()
+            return
+        }
         binding.editStock.visibility = View.VISIBLE
         binding.editStock.requestFocus()
         binding.editStock.dispatchTouchEvent(downEvent)
         binding.editStock.dispatchTouchEvent(upEvent)
+        binding.editStock.setText(if (product.stockEdited == 0) "" else product.stockEdited.toString())
         binding.layoutProductList.setBackgroundColor(graySelectedCardColor)
         binding.stock.visibility = View.GONE
         binding.disponible.visibility = View.GONE
@@ -95,9 +122,11 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
     private val onEditorActionListener = TextView.OnEditorActionListener { v, actionId, event ->
         if (actionId == EditorInfo.IME_ACTION_DONE
             || actionId == EditorInfo.IME_ACTION_NEXT
-            || event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+            || event != null && event.keyCode == KeyEvent.KEYCODE_ENTER
+        ) {
+            this@ProductsViewHolder.closeKeyboard()
 
-            if (!v.text.isNullOrEmpty() && product.stock >= v.text.toString().toInt()){
+            if (!v.text.isNullOrEmpty() && product.stock >= v.text.toString().toInt()) {
 
                 binding.editStock.visibility = View.GONE
                 product.edited = v.text.toString().toInt() > 0
@@ -112,5 +141,15 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
             }
         }
         false
+    }
+
+    private fun closeKeyboard() {
+        val manager = itemView.context.getSystemService(
+            INPUT_METHOD_SERVICE
+        ) as InputMethodManager?
+
+        manager?.hideSoftInputFromWindow(
+            itemView.windowToken, 0
+        )
     }
 }

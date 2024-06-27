@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -16,8 +15,8 @@ import com.example.hechoamano.R
 import com.example.hechoamano.databinding.ActivityProductsCustomerOrderBinding
 import com.example.hechoamano.domain.model.Client
 import com.example.hechoamano.domain.model.Product
+import com.example.hechoamano.ui.adapter.CustomAdapter
 import com.example.hechoamano.ui.base.BaseActionBarActivity
-import com.example.hechoamano.ui.base.BaseActivity
 import com.example.hechoamano.ui.customerorders.adapter.ProductsAdapter
 import com.example.hechoamano.ui.util.EmptyDataObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +53,7 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
         productViewModel.productModel.observe(this) {
             productArrayList = it
             initRecyclerView()
+            loadFilters()
         }
 
         productViewModel.isLoading.observe(this, Observer {
@@ -84,6 +84,7 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
             if(binding.buttonAgregados.text == "Ver todos"){
                 binding.buttonAgregados.text = "Ver agregados"
                 adapter.filterList(productArrayList)
+                loadFilters()
             } else {
                 binding.buttonAgregados.text = "Ver todos"
                 adapter.filterList(productArrayList.filter { it.edited })
@@ -103,6 +104,22 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
             } else {
                 productViewModel.navigateToSummary.postValue(productArrayList.filter { it.edited })
             }
+        }
+
+        binding.buttonRemover.setOnClickListener {
+            binding.filters.root.visibility = View.VISIBLE
+        }
+
+        binding.filters.buttonCerrar.setOnClickListener {
+            binding.filters.root.visibility = View.GONE
+        }
+
+        binding.filters.buttonAplicar.setOnClickListener {
+            applyFilters()
+        }
+
+        binding.filters.buttonLimpiarFiltros.setOnClickListener {
+            clearFilters()
         }
     }
 
@@ -147,5 +164,53 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
         binding.recyclerProducts.adapter = adapter
         val emptyDataObserver = EmptyDataObserver(binding.recyclerProducts, findViewById<View>(R.id.emptyDataParent))
         adapter.registerAdapterDataObserver(emptyDataObserver)
+    }
+
+    /**
+     * Filters
+     */
+    private lateinit var familiaAdapter: CustomAdapter
+    private lateinit var subfamiliaAdapter: CustomAdapter
+    private lateinit var tamanoAdapter: CustomAdapter
+    private lateinit var regionAdapter: CustomAdapter
+
+    private fun loadFilters(){
+        familiaAdapter = CustomAdapter(productArrayList.mapNotNull { it.family }.distinct())
+        binding.filters.recyclerFamilia.layoutManager = LinearLayoutManager(this)
+        binding.filters.recyclerFamilia.adapter = familiaAdapter
+
+        subfamiliaAdapter = CustomAdapter(productArrayList.mapNotNull { it.subfamily }.distinct())
+        binding.filters.recyclerSubFamilia.layoutManager = LinearLayoutManager(this)
+        binding.filters.recyclerSubFamilia.adapter = subfamiliaAdapter
+
+        tamanoAdapter = CustomAdapter(productArrayList.mapNotNull { it.size }.distinct())
+        binding.filters.recyclerTamano.layoutManager = LinearLayoutManager(this)
+        binding.filters.recyclerTamano.adapter = tamanoAdapter
+
+        regionAdapter = CustomAdapter(productArrayList.mapNotNull { it.region }.distinct())
+        binding.filters.recyclerRegion.layoutManager = LinearLayoutManager(this)
+        binding.filters.recyclerRegion.adapter = regionAdapter
+    }
+
+    private fun applyFilters(){
+        val familiaSelected = familiaAdapter.valuesSelected
+        val subfamiliaSelected = subfamiliaAdapter.valuesSelected
+        val tamanoSelected = tamanoAdapter.valuesSelected
+        val regionSelected = regionAdapter.valuesSelected
+
+        val filtered = productArrayList.filter { product ->
+            familiaSelected.contains(product.family?.lowercase()) ||
+                    subfamiliaSelected.contains(product.subfamily?.lowercase()) ||
+                    tamanoSelected.contains(product.size?.lowercase()) ||
+                    regionSelected.contains(product.region?.lowercase())
+        }
+
+        binding.buttonAgregados.text = "Ver todos"
+        adapter.filterList(filtered)
+        binding.filters.root.visibility = View.GONE
+    }
+
+    private fun clearFilters(){
+        loadFilters()
     }
 }

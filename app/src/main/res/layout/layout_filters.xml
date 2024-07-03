@@ -22,11 +22,11 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_limpiar_filtros"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:textSize="10sp"
         android:text="Limpiar filtros"
         android:textColor="@color/white"
+        android:background="@drawable/button_background_secondary"
         app:layout_constraintBottom_toBottomOf="@id/label_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/label_title" />

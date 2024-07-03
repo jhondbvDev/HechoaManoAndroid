@@ -142,7 +142,7 @@ class SummaryStockControlActivity : BaseActionBarActivity() {
 
     private fun showCancelOrderDialog() {
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("¿Estás seguro de salir y cancelar la orden?")
+        builder.setMessage("¿Estás seguro de salir y cancelar el inventario?")
             .setCancelable(false)
             .setTitle("Cancelar orden")
             .setPositiveButton("Sí") { dialog, id ->

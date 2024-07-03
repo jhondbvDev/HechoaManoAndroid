@@ -15,7 +15,7 @@ class CustomAdapter(private var values: List<String>) : RecyclerView.Adapter<Cus
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val item = values[position]
-        holder.render(item, onClickListener = { value, checked ->
+        holder.render(item, valuesSelected, onClickListener = { value, checked ->
             if (checked)
                 valuesSelected.add(value.lowercase())
             else

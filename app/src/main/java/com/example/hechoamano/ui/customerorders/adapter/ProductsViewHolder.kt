@@ -137,6 +137,7 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
             } else {
                 binding.editStock.visibility = View.GONE
                 setStyleEdited(product)
+                Toast.makeText(itemView.context, "No se puede ingresar una cantidad mayor a la disponible", Toast.LENGTH_LONG).show()
                 return@OnEditorActionListener true
             }
         }

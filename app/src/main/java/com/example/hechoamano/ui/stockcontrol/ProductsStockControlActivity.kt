@@ -199,11 +199,16 @@ class ProductsStockControlActivity : BaseActionBarActivity() {
         val tamanoSelected = tamanoAdapter.valuesSelected
         val regionSelected = regionAdapter.valuesSelected
 
-        val filtered = productArrayList.filter { product ->
-            familiaSelected.contains(product.family?.lowercase()) ||
-                    subfamiliaSelected.contains(product.subfamily?.lowercase()) ||
-                    tamanoSelected.contains(product.size?.lowercase()) ||
-                    regionSelected.contains(product.region?.lowercase())
+        val filtered = if (familiaSelected.isNotEmpty() || subfamiliaSelected.isNotEmpty() ||
+            tamanoSelected.isNotEmpty() || regionSelected.isNotEmpty()) {
+            productArrayList.filter { product ->
+                familiaSelected.run { isEmpty() || contains(product.family?.lowercase()) } &&
+                        subfamiliaSelected.run { isEmpty() || contains(product.subfamily?.lowercase()) } &&
+                        tamanoSelected.run { isEmpty() || contains(product.size?.lowercase()) } &&
+                        regionSelected.run { isEmpty() || contains(product.region?.lowercase()) }
+            }
+        } else {
+            listOf()
         }
 
         binding.buttonAgregados.text = "Ver todos"

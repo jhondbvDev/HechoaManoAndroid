@@ -14,7 +14,7 @@ class SummaryProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflat
 
     fun render(product: Product) {
 
-        binding.productName.text = product.subfamily?.let { product.family + " " + it } ?: product.family
+        (product.stockEdited.toString() + " " + (product.subfamily?.let { product.family + " " + it } ?: product.family)).also { binding.productName.text = it }
 
         val description = StringBuilder(binding.productDescription.text)
         product.type?.let { description.append(it).append(" | ") }
@@ -22,7 +22,7 @@ class SummaryProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflat
         product.region?.let { description.append(it) }
         binding.productDescription.text = description.toString()
 
-        format.format(product.salePrice.toInt()).also { binding.productPrice.text = it }
+        format.format(product.salePrice.toInt()).also { ("$it c/u").also { binding.productPrice.text = it } }
         val total = product.salePrice.toInt() * product.stockEdited
         format.format(total).also { binding.productTotal.text = it }
     }

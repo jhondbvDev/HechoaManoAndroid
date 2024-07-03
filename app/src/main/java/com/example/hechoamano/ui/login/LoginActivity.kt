@@ -36,7 +36,7 @@ class LoginActivity : BaseActivity() {
             login()
         }
 
-        if(false) {
+        if(true) {
             binding.user.setText("Admin")
             binding.password.setText("Admin")
             binding.loginButton.performClick()

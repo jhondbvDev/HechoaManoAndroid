@@ -108,6 +108,8 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
                 return@OnEditorActionListener true
             } else {
                 binding.editStock.visibility = View.GONE
+                product.edited = false
+                product.stockEdited = 0
                 setStyleEdited(product)
                 return@OnEditorActionListener true
             }

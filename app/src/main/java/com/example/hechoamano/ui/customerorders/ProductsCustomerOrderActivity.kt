@@ -30,6 +30,7 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
     private val productViewModel: ProductsCustomerOrderViewModel by viewModels()
     private lateinit var adapter: ProductsAdapter
     private lateinit var productArrayList: List<Product>
+    private lateinit var productsOriginal: List<Product>
 
     companion object {
         lateinit var client: Client
@@ -52,6 +53,7 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
 
         productViewModel.productModel.observe(this) {
             productArrayList = it
+            productsOriginal = it
             initRecyclerView()
             loadFilters()
         }
@@ -84,7 +86,6 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
             if(binding.buttonAgregados.text == "Ver todos"){
                 binding.buttonAgregados.text = "Ver agregados"
                 adapter.filterList(productArrayList)
-                loadFilters()
             } else {
                 binding.buttonAgregados.text = "Ver todos"
                 adapter.filterList(productArrayList.filter { it.edited })
@@ -175,19 +176,19 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
     private lateinit var regionAdapter: CustomAdapter
 
     private fun loadFilters(){
-        familiaAdapter = CustomAdapter(productArrayList.mapNotNull { it.family }.distinct())
+        familiaAdapter = CustomAdapter(productsOriginal.mapNotNull { it.family }.distinct())
         binding.filters.recyclerFamilia.layoutManager = LinearLayoutManager(this)
         binding.filters.recyclerFamilia.adapter = familiaAdapter
 
-        subfamiliaAdapter = CustomAdapter(productArrayList.mapNotNull { it.subfamily }.distinct())
+        subfamiliaAdapter = CustomAdapter(productsOriginal.mapNotNull { it.subfamily }.distinct())
         binding.filters.recyclerSubFamilia.layoutManager = LinearLayoutManager(this)
         binding.filters.recyclerSubFamilia.adapter = subfamiliaAdapter
 
-        tamanoAdapter = CustomAdapter(productArrayList.mapNotNull { it.size }.distinct())
+        tamanoAdapter = CustomAdapter(productsOriginal.mapNotNull { it.size }.distinct())
         binding.filters.recyclerTamano.layoutManager = LinearLayoutManager(this)
         binding.filters.recyclerTamano.adapter = tamanoAdapter
 
-        regionAdapter = CustomAdapter(productArrayList.mapNotNull { it.region }.distinct())
+        regionAdapter = CustomAdapter(productsOriginal.mapNotNull { it.region }.distinct())
         binding.filters.recyclerRegion.layoutManager = LinearLayoutManager(this)
         binding.filters.recyclerRegion.adapter = regionAdapter
     }
@@ -200,22 +201,24 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
 
         val filtered = if (familiaSelected.isNotEmpty() || subfamiliaSelected.isNotEmpty() ||
             tamanoSelected.isNotEmpty() || regionSelected.isNotEmpty()) {
-            productArrayList.filter { product ->
+            productsOriginal.filter { product ->
                 familiaSelected.run { isEmpty() || contains(product.family?.lowercase()) } &&
                         subfamiliaSelected.run { isEmpty() || contains(product.subfamily?.lowercase()) } &&
                         tamanoSelected.run { isEmpty() || contains(product.size?.lowercase()) } &&
                         regionSelected.run { isEmpty() || contains(product.region?.lowercase()) }
             }
         } else {
-            listOf()
+            productsOriginal
         }
 
-        binding.buttonAgregados.text = "Ver todos"
-        adapter.filterList(filtered)
+        productArrayList = filtered
+        initRecyclerView()
         binding.filters.root.visibility = View.GONE
     }
 
     private fun clearFilters(){
+        productArrayList = productsOriginal
+        initRecyclerView()
         loadFilters()
     }
 }

@@ -25,11 +25,14 @@ import com.example.hechoamano.data.session.SessionManager
 import com.example.hechoamano.databinding.ActivityProductsCustomerOrderBinding
 import com.example.hechoamano.databinding.ActivitySummaryCustomerOrderBinding
 import com.example.hechoamano.domain.model.Client
+import com.example.hechoamano.domain.model.ClientOrder
 import com.example.hechoamano.domain.model.Product
 import com.example.hechoamano.ui.base.BaseActionBarActivity
 import com.example.hechoamano.ui.customerorders.adapter.ProductsAdapter
 import com.example.hechoamano.ui.customerorders.adapter.SummaryProductsAdapter
 import com.example.hechoamano.ui.home.HomeActivity
+import com.example.hechoamano.ui.productentry.SummaryProductEntryActivity
+import com.example.hechoamano.ui.productentry.SummaryProductEntryActivity.Companion
 import com.example.hechoamano.ui.util.EmptyDataObserver
 import okhttp3.Credentials
 import okhttp3.ResponseBody
@@ -45,14 +48,19 @@ class SummaryCustomerOrderActivity : BaseActionBarActivity() {
     private val format = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
     private lateinit var binding: ActivitySummaryCustomerOrderBinding
     private lateinit var adapter: SummaryProductsAdapter
+    private var total: Double = 0.0
 
     companion object {
         lateinit var client: Client
         lateinit var products: List<Product>
+        lateinit var clientOrder: ClientOrder
+        private var readOnly: Boolean = false
 
-        fun getStartIntent(context: Context, client: Client, products: List<Product>): Intent {
+        fun getStartIntent(context: Context, client: Client, products: List<Product>, readOnly: Boolean = false, clientOrder: ClientOrder? = null): Intent {
+            SummaryCustomerOrderActivity.readOnly = readOnly
             SummaryCustomerOrderActivity.client = client
             SummaryCustomerOrderActivity.products = products
+            clientOrder?.let { SummaryCustomerOrderActivity.clientOrder = it }
             return Intent(context, SummaryCustomerOrderActivity::class.java)
         }
     }
@@ -85,24 +93,38 @@ class SummaryCustomerOrderActivity : BaseActionBarActivity() {
     }
 
     private fun loadInfo() {
-        val subtotal = products.sumOf { it.salePrice * it.stockEdited.toDouble() }
-        //val iva = subtotal * 0.19
-        val discount = (subtotal * client.discount / 100)
-        //val total = subtotal + iva - discount
-        val total = subtotal - discount
-
-        binding.subtotal.text = format.format(subtotal)
-        //binding.iva.text = format.format(iva)
         binding.iva.visibility = View.GONE
         binding.labelIva.visibility = View.GONE
 
-        binding.descuento.text = format.format(discount)
-        binding.total.text = format.format(total)
+        if (SummaryCustomerOrderActivity.readOnly) {
+            binding.editProducts.visibility = View.GONE
+            binding.buttonCrearOrden.visibility = View.GONE
+            binding.buttonCancelar.visibility = View.GONE
 
-        binding.clientName.text = client.name
-        binding.clientCity.text = client.city
-        binding.clientShopName.text = client.shopName
-        binding.clientTotal.text = format.format(total)
+            binding.subtotal.text = format.format(clientOrder.subtotal)
+            binding.descuento.text = format.format(clientOrder.calculetedDiscount)
+            binding.total.text = format.format(clientOrder.totalPrice)
+            binding.clientTotal.text = format.format(clientOrder.totalPrice)
+            binding.clientName.text = clientOrder.clientName
+            binding.clientCity.text = clientOrder.city
+            binding.clientShopName.text = clientOrder.shopName
+
+        } else {
+
+            val subtotal = products.sumOf { it.salePrice * it.stockEdited.toDouble() }
+            val discount = (subtotal * client.discount / 100)
+            total = subtotal - discount
+
+            binding.subtotal.text = format.format(subtotal)
+
+            binding.descuento.text = format.format(discount)
+            binding.total.text = format.format(total)
+
+            binding.clientName.text = client.name
+            binding.clientCity.text = client.city
+            binding.clientShopName.text = client.shopName
+            binding.clientTotal.text = format.format(total)
+        }
     }
 
     private fun initRecyclerView() {
@@ -143,7 +165,7 @@ class SummaryCustomerOrderActivity : BaseActionBarActivity() {
                         price = product.salePrice
                     )
                 },
-                products.sumOf { it.salePrice * it.stockEdited.toDouble() },
+                total,
             )
 
             apiService.saveClientOrders(clientOrderDTO).enqueue(object : Callback<ResponseBody> {

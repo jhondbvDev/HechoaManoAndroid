@@ -8,12 +8,14 @@ data class EmployeeOrder (
     val id: String,
     val employeeName: String,
     val totalPrice: Double,
-    val createdDate: String
+    val createdDate: String?,
+    val details: List<DetailOrder>?
 )
 
 fun EmployeeOrderModel.toDomain() = EmployeeOrder(
     id,
     employeeName,
     totalPrice,
-    createdDate
+    createdDate,
+    details?.map { it.toDomain() }
 )

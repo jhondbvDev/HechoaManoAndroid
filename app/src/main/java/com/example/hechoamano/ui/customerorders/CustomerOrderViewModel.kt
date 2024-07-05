@@ -3,9 +3,8 @@ package com.example.hechoamano.ui.customerorders
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hechoamano.domain.GetClientOrderID
 import com.example.hechoamano.domain.GetClientOrders
-import com.example.hechoamano.domain.GetClients
-import com.example.hechoamano.domain.model.Client
 import com.example.hechoamano.domain.model.ClientOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,7 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CustomerOrderViewModel @Inject constructor(
-    private val getClientOrders: GetClientOrders
+    private val getClientOrders: GetClientOrders,
+    private val getClientOrderID: GetClientOrderID
 ) : ViewModel() {
 
     val clientOrderModel = MutableLiveData<List<ClientOrder>>()
@@ -32,4 +32,18 @@ class CustomerOrderViewModel @Inject constructor(
             }
         }
     }
+
+    fun onItemSelected(clientOrder: ClientOrder){
+        viewModelScope.launch {
+            isLoading.postValue(true)
+            val result = getClientOrderID(clientOrder.id)
+
+            result?.let {
+                navigateToDetail.postValue(it)
+                isLoading.postValue(false)
+            }
+        }
+    }
+
+
 }

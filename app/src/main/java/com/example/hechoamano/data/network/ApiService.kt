@@ -46,10 +46,24 @@ class ApiService @Inject constructor(private val api: ApiClient) {
         }
     }
 
+    suspend fun getAllClientOrderId(id: String): ClientOrderModel?{
+        return  withContext(Dispatchers.IO){
+            val response = api.getAllClientOrdersId(id)
+            response.body()
+        }
+    }
+
     suspend fun getAllEmployeeOrders(): List<EmployeeOrderModel>{
         return  withContext(Dispatchers.IO){
             val response = api.getAllEmployeeOrders()
             response.body() ?: emptyList()
+        }
+    }
+
+    suspend fun getAllEmployeeOrderId(id: String): EmployeeOrderModel?{
+        return  withContext(Dispatchers.IO){
+            val response = api.getAllEmployeeOrdersId(id)
+            response.body()
         }
     }
 

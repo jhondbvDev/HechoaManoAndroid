@@ -16,4 +16,9 @@ class EmployeeRepository@Inject constructor(private val api: ApiService) {
         val response = api.getAllEmployeeOrders()
         return response.map { it.toDomain() }
     }
+
+    suspend fun  getEmployeeOrdersIDFromApi(id: String): EmployeeOrder? {
+        val response = api.getAllEmployeeOrderId(id)
+        return response?.toDomain()
+    }
 }

@@ -13,8 +13,11 @@ import com.example.hechoamano.R
 import com.example.hechoamano.databinding.ActivityCustomerOrderBinding
 import com.example.hechoamano.domain.model.Client
 import com.example.hechoamano.domain.model.ClientOrder
+import com.example.hechoamano.domain.model.Employee
+import com.example.hechoamano.domain.model.Product
 import com.example.hechoamano.ui.base.BaseActionBarActivity
 import com.example.hechoamano.ui.base.BaseActivity
+import com.example.hechoamano.ui.customerorders.ProductsCustomerOrderActivity.Companion
 import com.example.hechoamano.ui.customerorders.adapter.ClientOrdersAdapter
 import com.example.hechoamano.ui.customerorders.adapter.ClientsAdapter
 import com.example.hechoamano.ui.util.EmptyDataObserver
@@ -22,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
 @AndroidEntryPoint
-class CustomerOrderActivity : BaseActionBarActivity()  {
+class CustomerOrderActivity : BaseActionBarActivity() {
 
     private lateinit var binding: ActivityCustomerOrderBinding
 
@@ -59,8 +62,36 @@ class CustomerOrderActivity : BaseActionBarActivity()  {
             }
         })
 
-        clientViewModel.navigateToDetail.observe(this, Observer { it ->
-            //startActivity(ClientCustomerOrderActivity.getStartIntent(this))
+        clientViewModel.navigateToDetail.observe(this, Observer { clientOrder ->
+            val client = Client(
+                clientOrder.id,
+                clientOrder.clientName,
+                clientOrder.shopName,
+                clientOrder.city!!,
+                clientOrder.calculetedDiscount!!
+            )
+            val products = clientOrder.details?.map {
+                Product(
+                    id = it.productId,
+                    stock = it.quantity.toInt(),
+                    stockEdited = it.quantity.toInt(),
+                    salePrice = it.price,
+                    buyPrice = it.price,
+                    name = it.productName,
+                    family = it.productFamily,
+                    region = it.productRegion,
+                    subfamily = it.productSubFamily,
+                    size = it.productSize,
+                    type = it.productFamilyType,
+                    edited = true
+                )
+            }?.toList()
+            startActivity(
+                SummaryCustomerOrderActivity.getStartIntent(
+                    this,
+                    client, products!!, true, clientOrder
+                )
+            )
         })
 
         binding.swipeContainer.setOnRefreshListener {
@@ -96,8 +127,11 @@ class CustomerOrderActivity : BaseActionBarActivity()  {
         val filtered = ArrayList<ClientOrder>()
 
         for (item in clientOrderArrayList) {
-            if (item.clientName.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))
-                || item.shopName.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))) {
+            if (item.clientName.lowercase(Locale.getDefault())
+                    .contains(text.lowercase(Locale.getDefault()))
+                || item.shopName.lowercase(Locale.getDefault())
+                    .contains(text.lowercase(Locale.getDefault()))
+            ) {
                 filtered.add(item)
             }
         }
@@ -106,14 +140,16 @@ class CustomerOrderActivity : BaseActionBarActivity()  {
 
     private fun initRecyclerView() {
         binding.recyclerOrders.layoutManager = LinearLayoutManager(this)
-        adapter = ClientOrdersAdapter(clientOrderArrayList) { onItemSelected(it) }
+        adapter = ClientOrdersAdapter(clientOrderArrayList) { clientViewModel.onItemSelected(it) }
         binding.recyclerOrders.adapter = adapter
-        val emptyDataObserver = EmptyDataObserver(binding.recyclerOrders, findViewById<View>(R.id.emptyDataParent))
+        val emptyDataObserver =
+            EmptyDataObserver(binding.recyclerOrders, findViewById<View>(R.id.emptyDataParent))
         adapter.registerAdapterDataObserver(emptyDataObserver)
     }
 
     private fun onItemSelected(clientOrder: ClientOrder) {
         //Go to products
+        //clientViewModel.
         clientViewModel.navigateToDetail.postValue(clientOrder)
     }
 }

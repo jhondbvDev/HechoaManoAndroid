@@ -14,7 +14,7 @@ class EmployeeOrdersViewHolder(inflater: View) : RecyclerView.ViewHolder(inflate
     fun render(employeeOrder: EmployeeOrder, onClickListener: (EmployeeOrder) -> Unit) {
         binding.name.text = employeeOrder.employeeName
         binding.shopName.visibility = View.GONE
-        binding.createdDate.text = employeeOrder.createdDate.substring(0, 10)
+        binding.createdDate.text = employeeOrder.createdDate?.substring(0, 10)
         binding.totalPrice.text = format.format(employeeOrder.totalPrice)
         itemView.setOnClickListener { onClickListener(employeeOrder) }
     }

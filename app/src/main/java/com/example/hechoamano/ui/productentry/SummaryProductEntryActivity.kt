@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +13,9 @@ import com.example.hechoamano.data.dto.DetailOrderDTO
 import com.example.hechoamano.data.dto.EmployeeOrderDTO
 import com.example.hechoamano.data.network.ApiClient
 import com.example.hechoamano.databinding.ActivitySummaryProductEntryBinding
+import com.example.hechoamano.domain.model.ClientOrder
 import com.example.hechoamano.domain.model.Employee
+import com.example.hechoamano.domain.model.EmployeeOrder
 import com.example.hechoamano.domain.model.Product
 import com.example.hechoamano.ui.base.BaseActionBarActivity
 import com.example.hechoamano.ui.home.HomeActivity
@@ -33,10 +36,14 @@ class SummaryProductEntryActivity : BaseActionBarActivity() {
     companion object {
         lateinit var employee: Employee
         lateinit var products: List<Product>
+        lateinit var employeeOrder: EmployeeOrder
+        private var readOnly: Boolean = false
 
-        fun getStartIntent(context: Context, employee: Employee, products: List<Product>): Intent {
+        fun getStartIntent(context: Context, employee: Employee, products: List<Product>, readOnly: Boolean = false, employeeOrder: EmployeeOrder? = null): Intent {
+            SummaryProductEntryActivity.readOnly = readOnly
             SummaryProductEntryActivity.employee = employee
             SummaryProductEntryActivity.products = products
+            employeeOrder?.let { SummaryProductEntryActivity.employeeOrder = it }
             return Intent(context, SummaryProductEntryActivity::class.java)
         }
     }
@@ -69,11 +76,22 @@ class SummaryProductEntryActivity : BaseActionBarActivity() {
     }
 
     private fun loadInfo() {
-        val total = products.sumOf { it.stockEdited * it.buyPrice }
-        binding.total.text = format.format(total)
 
-        binding.employeeName.text = employee.name
-        binding.employeeTotal.text = format.format(total)
+        if(readOnly){
+            binding.editProducts.visibility = View.GONE
+            binding.buttonCrearOrden.visibility = View.GONE
+            binding.buttonCancelar.visibility = View.GONE
+
+            binding.total.text = format.format(employeeOrder.totalPrice)
+            binding.employeeName.text = employeeOrder.employeeName
+            binding.employeeTotal.text = format.format(employeeOrder.totalPrice)
+        } else {
+            val total = products.sumOf { it.stockEdited * it.buyPrice }
+            binding.total.text = format.format(total)
+
+            binding.employeeName.text = employee.name
+            binding.employeeTotal.text = format.format(total)
+        }
     }
 
     private fun initRecyclerView() {

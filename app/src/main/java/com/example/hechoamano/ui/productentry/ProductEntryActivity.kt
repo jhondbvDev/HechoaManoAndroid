@@ -4,26 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hechoamano.R
-import com.example.hechoamano.databinding.ActivityClientCustomerOrderBinding
 import com.example.hechoamano.databinding.ActivityProductEntryBinding
-import com.example.hechoamano.domain.model.Client
-import com.example.hechoamano.domain.model.ClientOrder
+import com.example.hechoamano.domain.model.Employee
 import com.example.hechoamano.domain.model.EmployeeOrder
+import com.example.hechoamano.domain.model.Product
 import com.example.hechoamano.ui.base.BaseActionBarActivity
-import com.example.hechoamano.ui.base.BaseActivity
-import com.example.hechoamano.ui.customerorders.ClientCustomerOrderActivity
-import com.example.hechoamano.ui.customerorders.ClientCustomerOrderViewModel
-import com.example.hechoamano.ui.customerorders.CustomerOrderViewModel
-import com.example.hechoamano.ui.customerorders.adapter.ClientOrdersAdapter
-import com.example.hechoamano.ui.customerorders.adapter.ClientsAdapter
 import com.example.hechoamano.ui.productentry.adapter.EmployeeOrdersAdapter
 import com.example.hechoamano.ui.util.EmptyDataObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,8 +60,23 @@ class ProductEntryActivity : BaseActionBarActivity() {
             }
         })
 
-        employeeViewModel.navigateToDetail.observe(this, Observer { it ->
-            //startActivity(ClientCustomerOrderActivity.getStartIntent(this))
+        employeeViewModel.navigateToDetail.observe(this, Observer { employeeOrder ->
+            val employee = Employee(employeeOrder.id, employeeOrder.employeeName)
+            val products = employeeOrder.details!!.map { Product(
+                id = it.productId,
+                stock = it.quantity.toInt(),
+                stockEdited = it.quantity.toInt(),
+                salePrice = it.price,
+                buyPrice = it.price,
+                name = it.productName,
+                family = it.productFamily,
+                region = it.productRegion,
+                subfamily = it.productSubFamily,
+                size = it.productSize,
+                type = it.productFamilyType,
+                edited = true
+            ) }.toList()
+            startActivity(SummaryProductEntryActivity.getStartIntent(this, employee, products, true, employeeOrder))
         })
 
         binding.swipeContainer.setOnRefreshListener {
@@ -114,14 +120,9 @@ class ProductEntryActivity : BaseActionBarActivity() {
 
     private fun initRecyclerView() {
         binding.recyclerOrders.layoutManager = LinearLayoutManager(this)
-        adapter = EmployeeOrdersAdapter(employeeOrderArrayList) { onItemSelected(it) }
+        adapter = EmployeeOrdersAdapter(employeeOrderArrayList) { employeeViewModel.onItemSelected(it) }
         binding.recyclerOrders.adapter = adapter
         val emptyDataObserver = EmptyDataObserver(binding.recyclerOrders, findViewById<View>(R.id.emptyDataParent))
         adapter.registerAdapterDataObserver(emptyDataObserver)
-    }
-
-    private fun onItemSelected(clientOrder: EmployeeOrder) {
-        //Go to products
-        employeeViewModel.navigateToDetail.postValue(clientOrder)
     }
 }

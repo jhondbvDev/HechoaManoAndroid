@@ -17,7 +17,7 @@ class ClientOrdersViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)
     fun render(clientOrder: ClientOrder, onClickListener: (ClientOrder) -> Unit) {
         binding.name.text = clientOrder.clientName
         binding.shopName.text = clientOrder.shopName
-        binding.createdDate.text = clientOrder.createdDate.substring(0, 10)
+        binding.createdDate.text = clientOrder.createdDate?.substring(0, 10)
         binding.totalPrice.text = format.format(clientOrder.totalPrice)
         itemView.setOnClickListener { onClickListener(clientOrder) }
     }

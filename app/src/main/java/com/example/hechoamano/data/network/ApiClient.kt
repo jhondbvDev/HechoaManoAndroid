@@ -18,6 +18,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiClient {
     @GET(Constants.PRODUCTS_URL)
@@ -32,8 +33,14 @@ interface ApiClient {
     @GET(Constants.CLIENT_ORDERS_URL)
     suspend fun getAllClientOrders(): Response<List<ClientOrderModel>>
 
+    @GET(Constants.CLIENT_ORDERS_ID_URL)
+    suspend fun getAllClientOrdersId(@Path("id") id: String): Response<ClientOrderModel>
+
     @GET(Constants.EMPLOYEE_ORDERS_URL)
     suspend fun getAllEmployeeOrders(): Response<List<EmployeeOrderModel>>
+
+    @GET(Constants.EMPLOYEE_ORDERS_ID_URL)
+    suspend fun getAllEmployeeOrdersId(@Path("id") id: String): Response<EmployeeOrderModel>
 
     @GET(Constants.INVENTORY_CONTROLS_URL)
     suspend fun getAllInventoryControls(): Response<List<InventoryControlModel>>

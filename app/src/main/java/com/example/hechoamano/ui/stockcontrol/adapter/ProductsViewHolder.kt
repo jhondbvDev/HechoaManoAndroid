@@ -1,10 +1,12 @@
 package com.example.hechoamano.ui.stockcontrol.adapter
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -52,6 +54,14 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
         this.product = product
 
         binding.editStock.setOnEditorActionListener(onEditorActionListener)
+
+        binding.editStock.setOnFocusChangeListener { view, hasFocus ->
+            run {
+                if (!hasFocus) {
+                    clearFocus()
+                }
+            }
+        }
     }
 
     private fun setVisibility(vararg views: View, visibility: Int) {
@@ -62,6 +72,7 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
         setVisibility(binding.stock, binding.stockEdited, binding.stockAvailable, binding.disp, binding.agr, binding.disponible, visibility = View.GONE)
 
         if(product.edited){
+            closeKeyboard()
             binding.stock.text = product.stockEdited.toString()
             binding.stock.visibility = View.VISIBLE
             binding.disponible.visibility = View.VISIBLE
@@ -100,5 +111,20 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
             return@OnEditorActionListener true
         }
         false
+    }
+
+    private fun clearFocus(){
+        binding.editStock.visibility = View.GONE
+        setStyleEdited(product)
+    }
+
+    private fun closeKeyboard() {
+        val manager = itemView.context.getSystemService(
+            INPUT_METHOD_SERVICE
+        ) as InputMethodManager?
+
+        manager?.hideSoftInputFromWindow(
+            itemView.windowToken, 0
+        )
     }
 }

@@ -74,6 +74,14 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
         this.product = product
 
         binding.editStock.setOnEditorActionListener(onEditorActionListener)
+
+        binding.editStock.setOnFocusChangeListener { view, hasFocus ->
+            run {
+                if (!hasFocus) {
+                    clearFocus()
+                }
+            }
+        }
     }
 
     private fun setStyleEdited(product: Product) {
@@ -135,13 +143,17 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
 
                 return@OnEditorActionListener true
             } else {
-                binding.editStock.visibility = View.GONE
-                setStyleEdited(product)
+                clearFocus()
                 Toast.makeText(itemView.context, "No se puede ingresar una cantidad mayor a la disponible", Toast.LENGTH_LONG).show()
                 return@OnEditorActionListener true
             }
         }
         false
+    }
+
+    private fun clearFocus(){
+        binding.editStock.visibility = View.GONE
+        setStyleEdited(product)
     }
 
     private fun closeKeyboard() {

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
@@ -93,6 +94,9 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
         }
 
         binding.buttonSiguiente.setOnClickListener {
+            it.isClickable = false
+            val current = currentFocus
+            current?.clearFocus()
             if(productArrayList.none { it.edited }){
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("No has agregado ningún producto a la orden")
@@ -122,6 +126,11 @@ class ProductsCustomerOrderActivity : BaseActionBarActivity() {
         binding.filters.buttonLimpiarFiltros.setOnClickListener {
             clearFilters()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.buttonSiguiente.isClickable = true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

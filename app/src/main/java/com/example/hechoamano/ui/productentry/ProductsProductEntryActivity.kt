@@ -93,6 +93,9 @@ class ProductsProductEntryActivity : BaseActionBarActivity() {
         }
 
         binding.buttonSiguiente.setOnClickListener {
+            it.isClickable = false
+            val current = currentFocus
+            current?.clearFocus()
             if(productArrayList.none { it.edited }){
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("No has agregado ningún producto a la orden")
@@ -122,6 +125,11 @@ class ProductsProductEntryActivity : BaseActionBarActivity() {
         binding.filters.buttonLimpiarFiltros.setOnClickListener {
             clearFilters()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.buttonSiguiente.isClickable = true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

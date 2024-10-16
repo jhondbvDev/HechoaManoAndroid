@@ -90,6 +90,10 @@ class SummaryCustomerOrderActivity : BaseActionBarActivity() {
         binding.buttonCrearOrden.setOnClickListener {
             showConfirmationDialog()
         }
+
+        binding.buttonEliminarOrden.setOnClickListener {
+            showDeleteDialog()
+        }
     }
 
     private fun loadInfo() {
@@ -100,6 +104,7 @@ class SummaryCustomerOrderActivity : BaseActionBarActivity() {
             binding.editProducts.visibility = View.GONE
             binding.buttonCrearOrden.visibility = View.GONE
             binding.buttonCancelar.visibility = View.GONE
+            binding.buttonEliminarOrden.visibility = View.VISIBLE
 
             binding.subtotal.text = format.format(clientOrder.subtotal)
             binding.descuento.text = format.format(clientOrder.calculetedDiscount)
@@ -110,6 +115,10 @@ class SummaryCustomerOrderActivity : BaseActionBarActivity() {
             binding.clientShopName.text = clientOrder.shopName
 
         } else {
+            binding.editProducts.visibility = View.VISIBLE
+            binding.buttonCrearOrden.visibility = View.VISIBLE
+            binding.buttonCancelar.visibility = View.VISIBLE
+            binding.buttonEliminarOrden.visibility = View.GONE
 
             val subtotal = products.sumOf { it.salePrice * it.stockEdited.toDouble() }
             val discount = (subtotal * client.discount / 100)
@@ -218,5 +227,59 @@ class SummaryCustomerOrderActivity : BaseActionBarActivity() {
         startActivity(Intent(this, HomeActivity::class.java))
         finishAffinity()
         finishAndRemoveTask()
+    }
+
+    private fun showDeleteDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("¿Estás seguro de eliminar la orden?")
+            .setCancelable(false)
+            .setTitle("Eliminar orden")
+            .setPositiveButton("Sí") { dialog, id ->
+                deleteOrder()
+            }
+            .setNegativeButton("No") { dialog, id ->
+                dialog.dismiss()
+            }
+        builder.create().show()
+    }
+
+    private fun deleteOrder() {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Eliminando orden...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        try {
+            val apiService = NetworkModule.provideRetrofit(this).create(ApiClient::class.java)
+
+            apiService.deleteClientOrder(SummaryCustomerOrderActivity.clientOrder.id).enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response.code() in 200..299) {
+                        val builder = AlertDialog.Builder(this@SummaryCustomerOrderActivity)
+                        builder.setMessage("Orden eliminada correctamente")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok") { dialog, id ->
+                                progressDialog.hide()
+                                finalizeOrder()
+                            }
+                        builder.create().show()
+                    } else {
+                        onUnknownError()
+                        progressDialog.hide()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    onUnknownError()
+                    progressDialog.hide()
+                }
+            })
+        } catch (e: Exception) {
+            onUnknownError()
+            progressDialog.hide()
+        }
     }
 }

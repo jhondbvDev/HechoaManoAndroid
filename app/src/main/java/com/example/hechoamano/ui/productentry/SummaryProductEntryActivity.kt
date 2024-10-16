@@ -18,6 +18,7 @@ import com.example.hechoamano.domain.model.Employee
 import com.example.hechoamano.domain.model.EmployeeOrder
 import com.example.hechoamano.domain.model.Product
 import com.example.hechoamano.ui.base.BaseActionBarActivity
+import com.example.hechoamano.ui.customerorders.SummaryCustomerOrderActivity
 import com.example.hechoamano.ui.home.HomeActivity
 import com.example.hechoamano.ui.productentry.adapter.SummaryProductsAdapter
 import okhttp3.ResponseBody
@@ -73,6 +74,10 @@ class SummaryProductEntryActivity : BaseActionBarActivity() {
         binding.buttonCrearOrden.setOnClickListener {
             showConfirmationDialog()
         }
+
+        binding.buttonEliminarOrden.setOnClickListener {
+            showDeleteDialog()
+        }
     }
 
     private fun loadInfo() {
@@ -81,11 +86,17 @@ class SummaryProductEntryActivity : BaseActionBarActivity() {
             binding.editProducts.visibility = View.GONE
             binding.buttonCrearOrden.visibility = View.GONE
             binding.buttonCancelar.visibility = View.GONE
+            binding.buttonEliminarOrden.visibility = View.VISIBLE
 
             binding.total.text = format.format(employeeOrder.totalPrice)
             binding.employeeName.text = employeeOrder.employeeName
             binding.employeeTotal.text = format.format(employeeOrder.totalPrice)
         } else {
+            binding.editProducts.visibility = View.VISIBLE
+            binding.buttonCrearOrden.visibility = View.VISIBLE
+            binding.buttonCancelar.visibility = View.VISIBLE
+            binding.buttonEliminarOrden.visibility = View.GONE
+
             val total = products.sumOf { it.stockEdited * it.buyPrice }
             binding.total.text = format.format(total)
 
@@ -185,5 +196,59 @@ class SummaryProductEntryActivity : BaseActionBarActivity() {
         startActivity(Intent(this, HomeActivity::class.java))
         finishAffinity()
         finishAndRemoveTask()
+    }
+
+    private fun showDeleteDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("¿Estás seguro de eliminar la entrada?")
+            .setCancelable(false)
+            .setTitle("Eliminar entrada")
+            .setPositiveButton("Sí") { dialog, id ->
+                deleteOrder()
+            }
+            .setNegativeButton("No") { dialog, id ->
+                dialog.dismiss()
+            }
+        builder.create().show()
+    }
+
+    private fun deleteOrder() {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Eliminando entrada...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        try {
+            val apiService = NetworkModule.provideRetrofit(this).create(ApiClient::class.java)
+
+            apiService.deleteEmployeeOrder(SummaryProductEntryActivity.employeeOrder.id).enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response.code() in 200..299) {
+                        val builder = AlertDialog.Builder(this@SummaryProductEntryActivity)
+                        builder.setMessage("Entrada eliminada correctamente")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok") { dialog, id ->
+                                progressDialog.hide()
+                                finalizeOrder()
+                            }
+                        builder.create().show()
+                    } else {
+                        onUnknownError()
+                        progressDialog.hide()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    onUnknownError()
+                    progressDialog.hide()
+                }
+            })
+        } catch (e: Exception) {
+            onUnknownError()
+            progressDialog.hide()
+        }
     }
 }

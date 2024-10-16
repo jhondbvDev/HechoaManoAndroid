@@ -46,4 +46,6 @@
     <string name="nuevo_inventario">Nuevo Inventario</string>
     <string name="historial_de_inventario">Historial de Inventario</string>
     <string name="confirmar">Confirmar</string>
+    <string name="eliminar_orden">Eliminar Orden</string>
+    <string name="eliminar_entrada">Eliminar entrada</string>
 </resources>

@@ -91,4 +91,16 @@ class ApiService @Inject constructor(private val api: ApiClient) {
             api.saveInventoryControls(inventoryOrderModel)
         }
     }
+
+    suspend fun deleteClientOrder(id: String){
+        return  withContext(Dispatchers.IO){
+            api.deleteClientOrder(id)
+        }
+    }
+
+    suspend fun deleteEmployeeOrder(id: String){
+        return  withContext(Dispatchers.IO){
+            api.deleteEmployeeOrder(id)
+        }
+    }
 }

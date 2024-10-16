@@ -15,6 +15,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -56,4 +57,10 @@ interface ApiClient {
 
     @POST(Constants.POST_INVENTORY_CONTROLS_URL)
     fun saveInventoryControls(@Body body: InventoryOrderDTO): Call<ResponseBody>
+
+    @DELETE(Constants.CLIENT_ORDERS_ID_URL)
+    fun deleteClientOrder(@Path("id") id: String): Call<ResponseBody>
+
+    @DELETE(Constants.EMPLOYEE_ORDERS_ID_URL)
+    fun deleteEmployeeOrder(@Path("id") id: String): Call<ResponseBody>
 }

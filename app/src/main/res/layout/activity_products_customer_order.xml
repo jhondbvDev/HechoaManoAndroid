@@ -7,15 +7,105 @@
     android:layout_height="match_parent"
     tools:context=".ui.customerorders.ProductsCustomerOrderActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linear_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/input_search"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:layout_weight="4"
+            android:background="@drawable/input_background_search"
+            app:drawableTint="@color/black"
+            app:iconifiedByDefault="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_filter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryHint="@string/buscar"
+            app:searchIcon="@drawable/ic_search" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_filter"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:drawableStart="@drawable/ic_filter"
+            android:drawableTint="@color/black"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingVertical="0dp"
+        android:weightSum="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_search">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_agregados"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="3"
+            android:background="#00000000"
+            android:drawableStart="@drawable/ic_agregados"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/gray_text"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:text="@string/ver_agregados"
+            android:textAlignment="textStart"
+            android:textColor="@color/gray_text" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_remover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:drawableStart="@drawable/ic_remover"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/gray_text"
+            android:padding="10dp"
+            android:text="Remover"
+            android:textAlignment="textStart"
+            android:textColor="@color/gray_text" />
+
+    </LinearLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linear_bottom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/linear_bottom">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_top">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerProducts"
@@ -28,57 +118,21 @@
         android:id="@+id/linear_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="@color/white"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="10dp"
-            android:weightSum="3">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_agregados"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_marginTop="10dp"
-                android:drawableStart="@drawable/ic_agregados"
-                android:drawableTint="@color/white"
-                android:padding="10dp"
-                android:maxLines="1"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/button_background_secondary"
-                android:text="@string/ver_agregados"
-                android:textColor="@color/white"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_remover"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginTop="10dp"
-                android:drawableStart="@drawable/ic_filter"
-                android:drawableTint="@color/white"
-                android:padding="10dp"
-                android:background="@drawable/button_background_secondary"
-                android:text="Filtrar"
-                android:textColor="@color/white"/>
-
-        </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_siguiente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
             android:background="@drawable/button_background"
             android:text="@string/siguiente"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
@@ -86,31 +140,31 @@
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/emptyDataParent"
         layout="@layout/layout_empty_dataset"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/filters"
+        layout="@layout/layout_filters"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/layout_filters"
+        android:layout_gravity="center"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_gravity="center"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

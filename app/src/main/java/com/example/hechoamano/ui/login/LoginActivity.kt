@@ -36,11 +36,11 @@ class LoginActivity : BaseActivity() {
             login()
         }
 
-        if(true) {
+        /*if(true) {
             binding.user.setText("Admin")
             binding.password.setText("Admin")
             binding.loginButton.performClick()
-        }
+        }*/
     }
 
     private fun login() {

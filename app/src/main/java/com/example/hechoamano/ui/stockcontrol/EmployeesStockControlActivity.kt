@@ -32,7 +32,7 @@ class EmployeesStockControlActivity : BaseActionBarActivity() {
         binding = ActivityEmployeesProductEntryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setActionBarTitle("Empleados")
+        setActionBarTitle("Historial de Inventario - Empleados")
 
         employeeViewModel.onCreate()
 

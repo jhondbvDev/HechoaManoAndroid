@@ -83,6 +83,10 @@ class ProductsProductEntryActivity : BaseActionBarActivity() {
         }
 
         binding.buttonAgregados.setOnClickListener {
+            binding.buttonRemover.visibility = View.VISIBLE
+            binding.buttonSiguiente.visibility = View.VISIBLE
+            binding.buttonFilter.visibility = View.VISIBLE
+            adapter.activeRemove(false)
             if(binding.buttonAgregados.text == "Ver todos"){
                 binding.buttonAgregados.text = "Ver agregados"
                 adapter.filterList(productArrayList)
@@ -103,6 +107,7 @@ class ProductsProductEntryActivity : BaseActionBarActivity() {
                     .setTitle("Orden vacía")
                     .setPositiveButton("Ok") { dialog, id ->
                         dialog.dismiss()
+                        it.isClickable = true
                     }
                 builder.create().show()
             } else {
@@ -110,7 +115,7 @@ class ProductsProductEntryActivity : BaseActionBarActivity() {
             }
         }
 
-        binding.buttonRemover.setOnClickListener {
+        binding.buttonFilter.setOnClickListener {
             binding.filters.root.visibility = View.VISIBLE
         }
 
@@ -125,23 +130,8 @@ class ProductsProductEntryActivity : BaseActionBarActivity() {
         binding.filters.buttonLimpiarFiltros.setOnClickListener {
             clearFilters()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        binding.buttonSiguiente.isClickable = true
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-
-        inflater.inflate(R.menu.search_menu, menu)
-
-        val searchItem = menu.findItem(R.id.actionSearch)
-
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.inputSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }
@@ -151,7 +141,20 @@ class ProductsProductEntryActivity : BaseActionBarActivity() {
                 return false
             }
         })
-        return true
+
+        binding.buttonRemover.setOnClickListener {
+            binding.buttonRemover.visibility = View.GONE
+            binding.buttonSiguiente.visibility = View.GONE
+            binding.buttonFilter.visibility = View.INVISIBLE
+            binding.buttonAgregados.text = "Ver todos"
+            adapter.filterList(productArrayList.filter { it.edited })
+            adapter.activeRemove(true)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.buttonSiguiente.isClickable = true
     }
 
     private fun filter(text: String) {

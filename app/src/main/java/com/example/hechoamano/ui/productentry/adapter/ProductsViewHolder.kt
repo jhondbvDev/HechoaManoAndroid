@@ -14,17 +14,37 @@ import com.example.hechoamano.R
 import com.example.hechoamano.databinding.ItemProductListBinding
 import com.example.hechoamano.domain.model.Product
 
-class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
+class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
+    private var remove: Boolean = false
     private lateinit var product: Product
     private val binding = ItemProductListBinding.bind(inflater)
-    private val downEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0)
-    private val upEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0)
+    private val downEvent = MotionEvent.obtain(
+        SystemClock.uptimeMillis(),
+        SystemClock.uptimeMillis(),
+        MotionEvent.ACTION_DOWN,
+        0f,
+        0f,
+        0
+    )
+    private val upEvent = MotionEvent.obtain(
+        SystemClock.uptimeMillis(),
+        SystemClock.uptimeMillis(),
+        MotionEvent.ACTION_UP,
+        0f,
+        0f,
+        0
+    )
     private val greenCardColor = ContextCompat.getColor(this.itemView.context, R.color.green_cards)
-    private val blueCardBackground = ContextCompat.getDrawable(this.itemView.context, R.drawable.button_list_blue)
-    private val graySelectedCardColor = ContextCompat.getColor(this.itemView.context, R.color.gray_selected_card)
+    private val blueCardBackground =
+        ContextCompat.getDrawable(this.itemView.context, R.drawable.button_list_blue)
+    private val graySelectedCardColor =
+        ContextCompat.getColor(this.itemView.context, R.color.gray_selected_card)
 
+    fun render(product: Product, remove: Boolean = false) {
+        this.remove = remove
+        if (remove) binding.delete.visibility = View.VISIBLE else binding.delete.visibility =
+            View.GONE
 
-    fun render(product: Product) {
         binding.name.text = product.subfamily?.let { product.family + " " + it } ?: product.family
         binding.region.text = product.region
 
@@ -42,7 +62,7 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
             binding.type.visibility = View.GONE
         }
 
-        if(product.subfamily != null && product.size == null && product.type == null){
+        if (product.subfamily != null && product.size == null && product.type == null) {
             binding.type.text = product.subfamily
             binding.type.visibility = View.VISIBLE
         }
@@ -62,10 +82,18 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
                 }
             }
         }
+
+        binding.delete.setOnClickListener {
+            binding.delete.visibility = View.GONE
+            binding.editStock.visibility = View.GONE
+            product.edited = false
+            product.stockEdited = 0
+            setStyleEdited(product)
+        }
     }
 
     private fun setStyleEdited(product: Product) {
-        if(product.edited){
+        if (product.edited) {
             binding.stockEdited.text = product.stockEdited.toString()
             binding.stockEdited.visibility = View.VISIBLE
             "/ ${product.stock}".also { binding.stockAvailable.text = it }
@@ -89,6 +117,8 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
     }
 
     private fun onClickViewListener(product: Product) {
+        if (remove) return
+
         binding.editStock.visibility = View.VISIBLE
         binding.editStock.requestFocus()
         binding.editStock.dispatchTouchEvent(downEvent)
@@ -106,11 +136,12 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
     private val onEditorActionListener = TextView.OnEditorActionListener { v, actionId, event ->
         if (actionId == EditorInfo.IME_ACTION_DONE
             || actionId == EditorInfo.IME_ACTION_NEXT
-            || event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+            || event != null && event.keyCode == KeyEvent.KEYCODE_ENTER
+        ) {
 
             this.closeKeyboard()
 
-            if (!v.text.isNullOrEmpty() && v.text.toString().toInt() > 0){
+            if (!v.text.isNullOrEmpty() && v.text.toString().toInt() > 0) {
 
                 binding.editStock.visibility = View.GONE
                 product.edited = v.text.toString().toInt() > 0
@@ -128,7 +159,7 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater)  {
         false
     }
 
-    private fun clearFocus(){
+    private fun clearFocus() {
         binding.editStock.visibility = View.GONE
         setStyleEdited(product)
     }

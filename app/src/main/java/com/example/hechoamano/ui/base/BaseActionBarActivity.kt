@@ -13,15 +13,24 @@ abstract class BaseActionBarActivity : AppCompatActivity() {
 
     protected fun setActionBarTitle(title: String) {
         supportActionBar?.title = title
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        supportActionBar?.show()
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FFFFFF")))
-        supportActionBar?.setDisplayShowTitleEnabled(true)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> { super.onOptionsItemSelected(item) }
+        }
+    }
     fun onUnknownError() {
         Toast.makeText(
             this,

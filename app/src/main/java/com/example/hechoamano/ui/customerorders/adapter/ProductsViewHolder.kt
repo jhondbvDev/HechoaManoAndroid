@@ -1,6 +1,5 @@
 package com.example.hechoamano.ui.customerorders.adapter
 
-import android.content.Context
 import android.content.Context.*
 import android.os.SystemClock
 import android.view.KeyEvent
@@ -11,7 +10,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hechoamano.R
 import com.example.hechoamano.databinding.ItemProductListBinding
@@ -19,6 +17,7 @@ import com.example.hechoamano.domain.model.Product
 
 
 class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
+    private var remove: Boolean = false
     private lateinit var product: Product
     private val binding = ItemProductListBinding.bind(inflater)
     private val downEvent = MotionEvent.obtain(
@@ -44,7 +43,11 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
         ContextCompat.getColor(this.itemView.context, R.color.gray_selected_card)
 
 
-    fun render(product: Product) {
+    fun render(product: Product, remove: Boolean = false) {
+        this.remove = remove
+        if (remove) binding.delete.visibility = View.VISIBLE else binding.delete.visibility =
+            View.GONE
+
         binding.name.text = product.subfamily?.let { product.family + " " + it } ?: product.family
         binding.region.text = product.region
 
@@ -82,6 +85,14 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
                 }
             }
         }
+
+        binding.delete.setOnClickListener {
+            binding.delete.visibility = View.GONE
+            binding.editStock.visibility = View.GONE
+            product.edited = false
+            product.stockEdited = 0
+            setStyleEdited(product)
+        }
     }
 
     private fun setStyleEdited(product: Product) {
@@ -109,6 +120,8 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
     }
 
     private fun onClickViewListener(product: Product) {
+        if (remove) return
+
         if (product.stock == 0) {
             Toast.makeText(itemView.context, "No hay stock disponible", Toast.LENGTH_SHORT).show()
             return
@@ -144,14 +157,18 @@ class ProductsViewHolder(inflater: View) : RecyclerView.ViewHolder(inflater) {
                 return@OnEditorActionListener true
             } else {
                 clearFocus()
-                Toast.makeText(itemView.context, "No se puede ingresar una cantidad mayor a la disponible", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    itemView.context,
+                    "No se puede ingresar una cantidad mayor a la disponible",
+                    Toast.LENGTH_LONG
+                ).show()
                 return@OnEditorActionListener true
             }
         }
         false
     }
 
-    private fun clearFocus(){
+    private fun clearFocus() {
         binding.editStock.visibility = View.GONE
         setStyleEdited(product)
     }

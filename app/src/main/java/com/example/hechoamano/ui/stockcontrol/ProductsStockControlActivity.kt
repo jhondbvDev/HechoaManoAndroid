@@ -47,7 +47,7 @@ class ProductsStockControlActivity : BaseActionBarActivity() {
         binding = ActivityProductsCustomerOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setActionBarTitle("Productos")
+        setActionBarTitle("Historial de Inventario - Productos")
 
         productViewModel.onCreate()
 
@@ -103,6 +103,7 @@ class ProductsStockControlActivity : BaseActionBarActivity() {
                     .setTitle("Orden vacía")
                     .setPositiveButton("Ok") { dialog, id ->
                         dialog.dismiss()
+                        it.isClickable = true
                     }
                 builder.create().show()
             } else {
@@ -110,7 +111,7 @@ class ProductsStockControlActivity : BaseActionBarActivity() {
             }
         }
 
-        binding.buttonRemover.setOnClickListener {
+        binding.buttonFilter.setOnClickListener {
             binding.filters.root.visibility = View.VISIBLE
         }
 
@@ -125,23 +126,8 @@ class ProductsStockControlActivity : BaseActionBarActivity() {
         binding.filters.buttonLimpiarFiltros.setOnClickListener {
             clearFilters()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        binding.buttonSiguiente.isClickable = true
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-
-        inflater.inflate(R.menu.search_menu, menu)
-
-        val searchItem = menu.findItem(R.id.actionSearch)
-
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.inputSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }
@@ -151,7 +137,13 @@ class ProductsStockControlActivity : BaseActionBarActivity() {
                 return false
             }
         })
-        return true
+
+        binding.buttonRemover.visibility = View.GONE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.buttonSiguiente.isClickable = true
     }
 
     private fun filter(text: String) {
